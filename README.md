@@ -8,7 +8,7 @@ Global changes :
 
 "scripts": {
   ...
-+ "babel": "rm -rf dist && npx babel src --out-dir dist"
++ "babel": "rm -rf dist && npm run rollup && npx babel src --out-dir dist"
 },
 ```
 

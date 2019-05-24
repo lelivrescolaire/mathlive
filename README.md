@@ -1,3 +1,42 @@
+⚠️ Fork to fix IE 11 + Edge issue ⚠️
+Based on https://github.com/arnog/mathlive/issues/195
+
+Global changes :
+
+```diff
+// package.json
+
+"scripts": {
+  ...
++ "babel": "rm -rf dist && npx babel src --out-dir dist"
+},
+```
+
+```diff
+// src/core/definitions.js
+
++// Edit : https://github.com/arnog/mathlive/issues/195#issuecomment-493741744
+-const LETTER =
+-   typeof navigator !== 'undefined' && /firefox|edge/i.test(navigator.userAgent) ?
+-       /[a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/ :
+-       new RegExp("\\p{Letter}", 'u');
+
++const LETTER =
++   // typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent) ?
++       /[a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/; // :
++   //    new RegExp("\\p{Letter}", 'u');
+
+-const LETTER_AND_DIGITS =
+-   typeof navigator !== 'undefined'  && /firefox|edge/i.test(navigator.userAgent) ?
+-       /[0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/ :
+-      new RegExp("[0-9\\p{Letter}]", 'u');
+
++const LETTER_AND_DIGITS =
++   // typeof navigator !== 'undefined'  && /firefox/i.test(navigator.userAgent) ?
++      /[0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/; // :
++    //   new RegExp("[0-9\\p{Letter}]", 'u');
+```
+
 <img alt="math live" src="assets/logo-1024.jpg?raw=true">
 
 
@@ -28,20 +67,20 @@ Try it at [mathlive.io](https://mathlive.io)
 <table align="center" >
     <tr>
         <td width='50%' align='center' style="border:none;">
-            <img alt="The popover panel" 
-            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee' 
+            <img alt="The popover panel"
+            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee'
             src="assets/screenshots/popover.png">
         </td>
         <td width='50%' align='center' style="border:none;">
-            <img alt="A Virtual Keyboard" 
-            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee' 
+            <img alt="A Virtual Keyboard"
+            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee'
             src="assets/screenshots/virtualKeyboard.png">
         </td>
     </tr>
     <tr style="background-color: initial; border: none;">
         <td colspan="2" align="center" style="border:none;">
-            <img width="50%" alt="The Loop Equation" 
-            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee' 
+            <img width="50%" alt="The Loop Equation"
+            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee'
             src="assets/screenshots/loop-eqn.png">
         </td>
     </tr>
@@ -52,8 +91,8 @@ Try it at [mathlive.io](https://mathlive.io)
 
 
 ### To display math
-You can use MathLive to simply render math equations by 
-[adding a few lines to your web page](tutorials/USAGE_GUIDE.md). 
+You can use MathLive to simply render math equations by
+[adding a few lines to your web page](tutorials/USAGE_GUIDE.md).
 
 ```html
 <!doctype html><html lang="en-US">
@@ -65,9 +104,9 @@ You can use MathLive to simply render math equations by
 </head>
 <body>
     <h1>Euler's Identity</h1>
-    <p>$$e^{i\pi} + 1 = 0$$</p> 
+    <p>$$e^{i\pi} + 1 = 0$$</p>
 
-    <script> 
+    <script>
         MathLive.renderMathInDocument();
     </script>
 </body>
@@ -76,7 +115,7 @@ You can use MathLive to simply render math equations by
 
 
 ### To edit math
-You can also incorporate a “math field” to edit math just like you would edit 
+You can also incorporate a “math field” to edit math just like you would edit
 text. The MathLive APIs allow you to interact with the math field,
 including extracting its content, inserting placeholders and more.
 
@@ -90,7 +129,7 @@ including extracting its content, inserting placeholders and more.
 <body>
     <div id='mathfield'>f(x)=</div>
 
-    <script type='module'> 
+    <script type='module'>
         import MathLive from 'https://unpkg.com/mathlive/dist/mathlive.mjs';
         MathLive.makeMathField('mathfield');
     </script>
@@ -110,7 +149,7 @@ However, if you:
 - want to contribute to MathLive
 - use your own CDN
 - make some other changes to MathLive
-you can also install it locally in your project. 
+you can also install it locally in your project.
 
 To do so:
 ```bash
@@ -123,16 +162,16 @@ This will make a local build of MathLive, run a local HTTP server and open a pag
 
 * Something wrong? Got ideas for new features? Write up an issue. Read about
 [Contributing](CONTRIBUTING.md) and follow our [Code of Conduct](CODE_OF_CONDUCT.md)
-* Want to use MathLive in your web page? The [Usage Guide](tutorials/USAGE_GUIDE.md) 
+* Want to use MathLive in your web page? The [Usage Guide](tutorials/USAGE_GUIDE.md)
 has all the details.
-* Want to contribute some code for an issue or a feature? Read the 
-[Contributor Guide](tutorials/CONTRIBUTOR_GUIDE.md) and the 
+* Want to contribute some code for an issue or a feature? Read the
+[Contributor Guide](tutorials/CONTRIBUTOR_GUIDE.md) and the
 [docs](http://docs.mathlive.io). Looking for inspiration? Pick one of
 the [good first issues](https://github.com/arnog/mathlive/labels/good%20first%20issue)
 
 ## More Questions?
 
-* Join our Slack channel at https://mathlive.slack.com. 
+* Join our Slack channel at https://mathlive.slack.com.
 * Drop a line to arno@arno.org or [/u/real_arnog](https://www.reddit.com/user/real_arnog)
 
 ## License

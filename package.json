@@ -1,6 +1,6 @@
 {
   "name": "@lls/mathlive",
-  "version": "0.29.0",
+  "version": "0.29.1",
   "description": "Render and edit beautifully typeset math",
   "license": "MIT",
   "repository": {
@@ -44,7 +44,7 @@
     "watch-test": "chokidar \"src/*.js\" -c \"npm run test -s\" ",
     "coverage": "nyc npm run babel-node ./test/test.js && nyc report",
     "coverage:report": "nyc report",
-    "prepare": "npm run dist",
+    "prepare": "npm-run-all -s dist babel",
     "predocs": "echo Build docs...",
     "docs": "jsdoc -c ./jsdoc.conf.json && echo docs.mathlive.io > docs/CNAME",
     "watch-docs": "chokidar \"src/*.js\" \"tutorials/*.md\" \"examples/*.md\" -c \"npm run docs -s\"",
@@ -52,7 +52,7 @@
     "rollup": "rollup --config",
     "watch-rollup": "rollup --config --watch",
     "dist": "npm-run-all -s clean build docs test",
-    "babel": "rm -rf dist && npm run rollup && npx babel src --out-dir dist"
+    "babel": "npx babel src --out-dir dist"
   },
   "nyc": {
     "exclude": [

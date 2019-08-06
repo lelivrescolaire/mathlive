@@ -21,7 +21,7 @@ var metrics = [{}, {}, {}];
 var i;
 
 for (var key in _fontMetrics.SIGMAS) {
-  if (_fontMetrics.SIGMAS.hasOwnProperty(key)) {
+  if (Object.prototype.hasOwnProperty.call(_fontMetrics.SIGMAS, key)) {
     for (i = 0; i < 3; i++) {
       metrics[i][key] = _fontMetrics.SIGMAS[key][i];
     }

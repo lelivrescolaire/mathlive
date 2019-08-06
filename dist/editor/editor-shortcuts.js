@@ -10,7 +10,6 @@ var _definitions = _interopRequireDefault(require("../core/definitions.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @module editor/shortcuts
  * @private
  */
 
@@ -53,8 +52,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * - 'extend' keeps the anchor of the  selection, but moves the focus (extends,
  * or shrinks, the range of selected items)
  * 
- * @memberof module:editor/shortcuts
  * @type {Object<string,string>}
+ * @private
  */
 var KEYBOARD_SHORTCUTS = {
   'Left': 'moveToPreviousChar',
@@ -240,10 +239,10 @@ var KEYBOARD_SHORTCUTS = {
   '!mac:Ctrl-Alt-Up': ['speak', 'parent', {
     withHighlighting: false
   }],
-  'mac:Ctrl-Meta-Down': ['speak', 'group', {
+  'mac:Ctrl-Meta-Down': ['speak', 'all', {
     withHighlighting: false
   }],
-  '!mac:Ctrl-Alt-Down': ['speak', 'group', {
+  '!mac:Ctrl-Alt-Down': ['speak', 'all', {
     withHighlighting: false
   }],
   'mac:Ctrl-Meta-Left': ['speak', 'left', {
@@ -270,10 +269,10 @@ var KEYBOARD_SHORTCUTS = {
   '!mac:Ctrl-Alt-Shift-Up': ['speak', 'parent', {
     withHighlighting: true
   }],
-  'mac:Ctrl-Meta-Shift-Down': ['speak', 'group', {
+  'mac:Ctrl-Meta-Shift-Down': ['speak', 'all', {
     withHighlighting: true
   }],
-  '!mac:Ctrl-Alt-Shift-Down': ['speak', 'group', {
+  '!mac:Ctrl-Alt-Shift-Down': ['speak', 'all', {
     withHighlighting: true
   }],
   'mac:Ctrl-Meta-Shift-Left': ['speak', 'left', {
@@ -305,8 +304,8 @@ var KEYBOARD_SHORTCUTS = {
    * For example, '\sqrt' -> 'math:Alt-KeyV'. This table provides the reverse
    * mapping for those more complex commands. It is used when displaying 
    * keyboard shortcuts for specific commands in the popover.
-   * @memberof module:editor/shortcuts
    * @type {Object<string,string>}
+   * @private
    */
 
 };
@@ -337,7 +336,7 @@ var REVERSE_KEYBOARD_SHORTCUTS = {
    * without requiring an escape sequence or command.
    * 
    * @type {Object.<string,string>}
-   * @memberof module:editor/shortcuts
+   * @private
    */
 
 };
@@ -359,8 +358,10 @@ var INLINE_SHORTCUTS = {
     mode: 'text',
     value: '\\pi '
   },
-  'π': '\\pi',
-  'Pi': '\\Pi',
+  'Pi': {
+    mode: 'math',
+    value: '\\Pi'
+  },
   'theta': '\\theta',
   'Theta': '\\Theta',
   // Letter-like
@@ -1043,16 +1044,12 @@ function forCommand(command) {
 
   command = commandToString(command);
   var regex = new RegExp('^' + command.replace('\\', '\\\\').replace('|', '\\|').replace('*', '\\*').replace('$', '\\$').replace('^', '\\^') + '([^*a-zA-Z]|$)');
-
-  for (var shortcut in KEYBOARD_SHORTCUTS) {
-    if (KEYBOARD_SHORTCUTS.hasOwnProperty(shortcut)) {
-      if (regex.test(commandToString(KEYBOARD_SHORTCUTS[shortcut]))) {
-        var m = shortcut.match(/:([^:]*)$/);
-        if (m) result.push(m[1]);
-      }
+  Object.keys(KEYBOARD_SHORTCUTS).forEach(function (shortcut) {
+    if (regex.test(commandToString(KEYBOARD_SHORTCUTS[shortcut]))) {
+      var m = shortcut.match(/:([^:]*)$/);
+      if (m) result.push(m[1]);
     }
-  }
-
+  });
   return stringify(result);
 }
 /**

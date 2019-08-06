@@ -104,6 +104,7 @@ var VIRTUAL_KEY_NAMES = {
  * - Returns "Alt-Alt" when only the Alt key is pressed
  * @memberof module:editor/keyboard
  * @param {Event} evt 
+ * @private
  */
 
 function keyboardEventToString(evt) {
@@ -116,10 +117,6 @@ function keyboardEventToString(evt) {
     if (evt.target) {
       keyname = VIRTUAL_KEY_NAMES[evt.target.value] || evt.target.value;
     }
-  }
-
-  if (!keyname && evt.code) {
-    keyname = KEY_NAMES[evt.code] || evt.code;
   }
 
   if (!keyname) {
@@ -137,6 +134,10 @@ function keyboardEventToString(evt) {
     if (!keyname) {
       keyname = VIRTUAL_KEY_NAMES[evt.key.toLowerCase()] || evt.key;
     }
+  }
+
+  if (!keyname && evt.code) {
+    keyname = KEY_NAMES[evt.code] || evt.code;
   }
 
   var modifiers = [];
@@ -157,11 +158,11 @@ function keyboardEventToString(evt) {
  * in the `keystroke()` handler while text input should be handled in 
  * `typedtext()`.
  * 
- * @param {Element} textarea A `TextArea` element that will capture the keyboard
+ * @param {HTMLElement} textarea A `TextArea` element that will capture the keyboard
  * events. While this element will usually be a `TextArea`, it could be any
  * element that is focusable and can receive keyboard events.
  * @param {Object.<string, any>} handlers
- * @param {Element} [handlers.container]
+ * @param {HTMLElement} [handlers.container]
  * @param {function} handlers.keystroke invoked on a key down event, including 
  * for special keys such as ESC, arrow keys, tab, etc... and their variants 
  * with modifiers.

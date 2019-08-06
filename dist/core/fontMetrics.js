@@ -31,7 +31,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // - Hangul syllables: [\uAC00-\uD7AF]
 // Notably missing are half width Katakana and Romaji glyphs.
 var cjkRegex = /[\u3040-\u309F]|[\u30A0-\u30FF]|[\u4E00-\u9FAF]|[\uAC00-\uD7AF]/;
-/**
+/*
  *
  * In TeX, there are actually three sets of dimensions, one for each of
  * textstyle, scriptstyle, and scriptscriptstyle.  These are provided in the
@@ -132,7 +132,7 @@ var ptPerEm = 10.0; // The space between adjacent `|` columns in an array defini
 // article.cls.txt:455
 
 var doubleRuleSep = 2.0 / ptPerEm;
-/**
+/*
  * This is just a mapping from common names to real metrics
  */
 
@@ -311,6 +311,7 @@ var getCharacterMetrics = function getCharacterMetrics(character, fontCode) {
  * with a unit, which will override the `unit` paramter
  * @param {string} unit
  * @param {number} precision
+ * @private
  */
 
 

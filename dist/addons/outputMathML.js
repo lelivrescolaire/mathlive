@@ -21,8 +21,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @private
  */
 var SPECIAL_OPERATORS = {
-  '\\pm': '&#x00b1;',
-  '\\times': '&#x00d7;',
+  '\\pm': '&PlusMinus;',
+  '\\times': '&times;',
   '\\colon': ':',
   '\\vert': '|',
   '\\Vert': "\u2225",
@@ -129,12 +129,11 @@ function scanIdentifier(stream, final, options) {
     }
 
     if ((stream.lastType === 'mi' || stream.lastType === 'mn' || stream.lastType === 'mtext' || stream.lastType === 'fence') && !/^<mo>(.*)<\/mo>$/.test(mathML)) {
-      mathML = '<mo>&#x2062;</mo>' + mathML; // INVISIBLE TIMES
+      mathML = '<mo>&InvisibleTimes;</mo>' + mathML;
     }
 
     if (body.endsWith('>f</mi>') || body.endsWith('>g</mi>')) {
-      mathML += '<mo>&#x2061;</mo>'; // APPLY FUNCTION
-
+      mathML += '<mo> &ApplyFunction; </mo>';
       stream.lastType = 'applyfunction';
     } else {
       stream.lastType = /^<mo>(.*)<\/mo>$/.test(mathML) ? 'mo' : 'mi';
@@ -151,6 +150,7 @@ function scanIdentifier(stream, final, options) {
  * Superscripts can be encoded either as an attribute on the last atom
  * or as a standalone, empty, atom following the one to which it applies.
  * @param {object} stream
+ * @private
  */
 
 
@@ -317,7 +317,7 @@ function scanFence(stream, final, options) {
       mathML += '</mrow>';
 
       if (stream.lastType === 'mi' || stream.lastType === 'mn' || stream.lastType === 'mfrac' || stream.lastType === 'fence') {
-        mathML = '<mo>&#x2062;</mo>' + mathML; // INVISIBLE TIMES
+        mathML = '<mo>&InvisibleTimes;</mo>' + mathML;
       }
 
       stream.index = closeIndex + 1;
@@ -406,7 +406,7 @@ function scanOperator(stream, final, options) {
 
 
     if ((stream.lastType === 'mi' || stream.lastType === 'mn') && !/^<mo>(.*)<\/mo>$/.test(mathML)) {
-      mathML = '<mo>&#x2062;</mo>' + mathML; // INVISIBLE TIMES
+      mathML = '<mo>&InvisibleTimes;</mo>' + mathML;
     }
 
     stream.index += 1;
@@ -538,6 +538,7 @@ function toString(atoms) {
  * Return a MathML fragment representation of a single atom
  *
  * @return {string}
+ * @private
  */
 
 
@@ -776,26 +777,29 @@ _mathAtom.default.MathAtom.prototype.toMathML = function (options) {
       break;
 
     case 'mord':
-      result = SPECIAL_IDENTIFIERS[command] || command || (typeof this.body === 'string' ? this.body : '');
-      m = command ? command.match(/[{]?\\char"([0-9abcdefABCDEF]*)[}]?/) : null;
+      {
+        result = SPECIAL_IDENTIFIERS[command] || command || (typeof this.body === 'string' ? this.body : '');
+        m = command ? command.match(/[{]?\\char"([0-9abcdefABCDEF]*)[}]?/) : null;
 
-      if (m) {
-        // It's a \char command
-        result = '&#x' + m[1] + ';';
-      } else if (result.length > 0 && result.charAt(0) === '\\') {
-        // This is an identifier with no special handling. Use the
-        // Unicode value
-        if (typeof this.body === 'string' && this.body.charCodeAt(0) > 255) {
-          result = '&#x' + ('000000' + this.body.charCodeAt(0).toString(16)).substr(-4) + ';';
-        } else if (typeof this.body === 'string') {
-          result = this.body.charAt(0);
-        } else {
-          result = this.body;
+        if (m) {
+          // It's a \char command
+          result = '&#x' + m[1] + ';';
+        } else if (result.length > 0 && result.charAt(0) === '\\') {
+          // This is an identifier with no special handling. Use the
+          // Unicode value
+          if (typeof this.body === 'string' && this.body.charCodeAt(0) > 255) {
+            result = '&#x' + ('000000' + this.body.charCodeAt(0).toString(16)).substr(-4) + ';';
+          } else if (typeof this.body === 'string') {
+            result = this.body.charAt(0);
+          } else {
+            result = this.body;
+          }
         }
-      }
 
-      result = '<mi' + variant + makeID(this.id, options) + '>' + xmlEscape(result) + '</mi>';
-      break;
+        var tag = /\d/.test(result) ? 'mn' : 'mi';
+        result = '<' + tag + variant + makeID(this.id, options) + '>' + xmlEscape(result) + '</' + tag + '>';
+        break;
+      }
 
     case 'mbin':
     case 'mrel':
@@ -861,7 +865,7 @@ _mathAtom.default.MathAtom.prototype.toMathML = function (options) {
       result = '<menclose notation="';
 
       for (var notation in this.notation) {
-        if (this.notation.hasOwnProperty(notation) && this.notation[notation]) {
+        if (Object.prototype.hasOwnProperty.call(this.notation, notation) && this.notation[notation]) {
           result += sep + notation;
           sep = ' ';
         }

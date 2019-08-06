@@ -351,7 +351,7 @@ function makeSizedDelim(type, delim, size, context, classes) {
   console.assert(false, 'Unknown delimiter \'' + delim + '\'');
   return null;
 }
-/**
+/*
  * There are three different sequences of delimiter sizes that the delimiters
  * follow depending on the kind of delimiter. This is used when creating custom
  * sized delimiters to decide whether to create a small, large, or stacked
@@ -426,7 +426,7 @@ var stackLargeDelimiterSequence = [{
 }, {
   type: 'stack'
 }];
-/**
+/*
  * Get the font used in a delimiter based on what kind of delimiter it is.
  */
 

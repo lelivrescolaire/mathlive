@@ -1,10 +1,10 @@
 /**
  * @typedef {function} MathFieldCallback
- * @param {any} mf
- * @return void
+ * @param {MathField} mf
+ * @return {void}
  * @global
  */
-declare type MathFieldCallback = (mf: any) => any;
+declare type MathFieldCallback = (mf: MathField) => void;
 
 /**
  @typedef MathFieldConfig

@@ -1,5 +1,5 @@
 /**
- *
+ * 
  * See {@linkcode MathField}
  * @module editor/mathfield
  * @private
@@ -35,8 +35,8 @@ import '../addons/outputSpokenText.js';
 
 /**
  * @typedef {function} MathFieldCallback
- * @param {any} mf
- * @return void
+ * @param {MathField} mf
+ * @return {void}
  * @global
  */
 
@@ -136,7 +136,7 @@ function off(el, selectors, listener, options) {
 function getSharedElement(id, cls) {
     let result = document.getElementById(id);
     if (result) {
-        result.setAttribute('data-refcount',
+        result.setAttribute('data-refcount', 
             parseInt(result.getAttribute('data-refcount')) + 1);
     } else {
         result = document.createElement('div');
@@ -163,7 +163,7 @@ function releaseSharedElement(el) {
 
 /**
  * Validate a style specification object
- * @param {object} style
+ * @param {object} style 
  * @private
  */
 function validateStyle(style) {
@@ -258,7 +258,7 @@ function validateStyle(style) {
 */
 
 /**
- *
+ * 
  * @property {HTMLElement} element - The DOM element this mathfield is attached to.
  * @property {Object.<string, any>} config - A set of key/value pairs that can
  * be used to customize the behavior of the mathfield
@@ -338,7 +338,7 @@ class MathField {
         }
         markup += '<span class="ML__fieldcontainer">' +
             '<span class="ML__fieldcontainer__field"></span>';
-        // If no value is specified for the virtualKeyboardMode, use
+        // If no value is specified for the virtualKeyboardMode, use 
         // `onfocus` on touch-capable devices and `off` otherwise.
         if (!this.config.virtualKeyboardMode) {
             this.config.virtualKeyboardMode =
@@ -408,14 +408,14 @@ class MathField {
         this.suggestionIndex = 0;
         // The input mode (text, math, command)
         // While mathlist.anchorMode() represent the mode of the current selection,
-        // this.mode is the mode chosen by the user. It indicates the mode the
-        // next character typed will be interpreted in.
+        // this.mode is the mode chosen by the user. It indicates the mode the 
+        // next character typed will be interpreted in. 
         // It is often identical to mathlist.anchorMode() since changing the selection
-        // changes the mode, but sometimes it is not, for example when a user
+        // changes the mode, but sometimes it is not, for example when a user 
         // enters a mode changing command.
         this.mode = config.defaultMode || 'math';
         this.smartModeSuppressed = false;
-        // Current style (color, weight, italic, etc...)
+        // Current style (color, weight, italic, etc...) 
         // Reflects the style to be applied on next insertion, if any
         this.style = {};
         // Focus/blur state
@@ -679,7 +679,7 @@ class MathField {
         function onPointerMove(evt) {
             const x = evt.touches ? evt.touches[0].clientX : evt.clientX;
             const y = evt.touches ? evt.touches[0].clientY : evt.clientY;
-            // Ignore events that are within small spatial and temporal bounds
+            // Ignore events that are within small spatial and temporal bounds 
             // of the pointer down
             const hysteresis = evt.pointerType === 'touch' ? 20 : 5;
             if (Date.now() < anchorTime + 500 &&
@@ -713,7 +713,7 @@ class MathField {
         const anchorX = evt.touches ? evt.touches[0].clientX : evt.clientX;
         const anchorY = evt.touches ? evt.touches[0].clientY : evt.clientY;
         const anchorTime = Date.now();
-        // Calculate the tap count
+        // Calculate the tap count 
         if (lastTap && Math.abs(lastTap.x - anchorX) < 5 &&
             Math.abs(lastTap.y - anchorY) < 5 &&
             Date.now() < lastTap.time + 500) {
@@ -730,8 +730,8 @@ class MathField {
         const bounds = this.field.getBoundingClientRect();
         if (anchorX >= bounds.left && anchorX <= bounds.right &&
             anchorY >= bounds.top && anchorY <= bounds.bottom) {
-            // Create divs to block out pointer tracking to the left and right of
-            // the math field (to avoid triggering the hover of the virtual
+            // Create divs to block out pointer tracking to the left and right of 
+            // the math field (to avoid triggering the hover of the virtual 
             // keyboard toggle, for example)
             let div = document.createElement('div');
             div.className = 'ML__scroller';
@@ -746,7 +746,7 @@ class MathField {
                 dirty = true;
                 if (this.textarea.focus) { this.textarea.focus(); }
             }
-            // Clicking or tapping the field resets the keystroke buffer and
+            // Clicking or tapping the field resets the keystroke buffer and 
             // smart mode
             this._resetKeystrokeBuffer();
             this.smartModeSuppressed = false;
@@ -1031,7 +1031,7 @@ class MathField {
             dirty = this[selector](...args);
             handled = true;
         }
-        // If the command changed the selection so that it is no longer
+        // If the command changed the selection so that it is no longer 
         // collapsed, or if it was an editing command, reset the inline
         // shortcut buffer and the user style
         if (!this.mathlist.isCollapsed() || /^(transpose|paste|complete|((moveToNextChar|moveToPreviousChar|extend).*))_$/.test(selector)) {
@@ -1052,7 +1052,7 @@ class MathField {
      * @private
      */
     performWithFeedback_(command) {
-        this.focus();
+        this.$focus();
         if (this.config.keypressVibration && navigator.vibrate) {
             navigator.vibrate(HAPTIC_FEEDBACK_DURATION);
         }
@@ -1171,7 +1171,7 @@ class MathField {
             this.mathlist.siblings().splice(i - 1, 1);
             this.mathlist.contentDidChange();
             // We need to adjust the selection after doing some surgery on the atoms list
-            // But we don't want to receive selection notification changes
+            // But we don't want to receive selection notification changes 
             // which could have a side effect of changing the mode :(
             const save = this.mathlist.suppressChangeNotifications;
             this.mathlist.suppressChangeNotifications = true;
@@ -1288,7 +1288,7 @@ class MathField {
                 return true;
             }
             if (/\.[0-9]$/.test(context)) {
-                // If the new character is a digit,
+                // If the new character is a digit, 
                 // and it was preceded by a dot (which may have been converted
                 // to text)
                 // turn the dot back into 'math'
@@ -1345,7 +1345,7 @@ class MathField {
                 return true;
             }
             if (/\?|\./.test(c)) {
-                // If the last character is a period or question mark,
+                // If the last character is a period or question mark, 
                 // turn it to 'text'
                 return true;
             }
@@ -1378,7 +1378,7 @@ class MathField {
         let resetKeystrokeBuffer = false;
         // 4.1 Check if the keystroke, prefixed with the previously typed keystrokes,
         // would match a long shortcut (i.e. '~~')
-        // Ignore the key if command or control is pressed (it may be a shortcut,
+        // Ignore the key if command or control is pressed (it may be a shortcut, 
         // see 4.3)
         if (this.mode !== 'command' && (!evt || (!evt.ctrlKey && !evt.metaKey))) {
             const c = Keyboard.eventToChar(evt);
@@ -1442,7 +1442,7 @@ class MathField {
         }
         // 4.3 Check if this matches a keystroke shortcut
         // Need to check this **after** checking for inline shortcuts because
-        // shift+backquote is a keystroke that inserts "\~"", but "~~" is a
+        // shift+backquote is a keystroke that inserts "\~"", but "~~" is a 
         // shortcut for "\approx" and needs to have priority over shift+backquote
         if (!shortcut && !selector) {
             selector = Shortcuts.selectorForKeystroke(this.mode, keystroke);
@@ -1450,11 +1450,11 @@ class MathField {
         // No shortcut :( We're done.
         if (!shortcut && !selector) { return true; }
         // 5. Perform the action matching this shortcut
-        // 5.1 Remove any error indicator (wavy underline) on the current command
+        // 5.1 Remove any error indicator (wavy underline) on the current command 
         // sequence (if there are any)
         this.mathlist.decorateCommandStringAroundInsertionPoint(false);
-        // 5.2 If we have a `moveAfterParent` selector (usually triggered with
-        // `spacebar), and we're at the end of a smart fence, close the fence with
+        // 5.2 If we have a `moveAfterParent` selector (usually triggered with 
+        // `spacebar), and we're at the end of a smart fence, close the fence with 
         // an empty (.) right delimiter
         const parent = this.mathlist.parent();
         if (selector === 'moveAfterParent' && parent &&
@@ -1462,12 +1462,12 @@ class MathField {
             this.mathlist.endOffset() === this.mathlist.siblings().length - 1 &&
             this.config.smartFence &&
             this.mathlist._insertSmartFence('.')) {
-            // Pressing the space bar (moveAfterParent selector) when at the end
+            // Pressing the space bar (moveAfterParent selector) when at the end 
             // of a potential smartfence will close it as a semi-open fence
             selector = '';
             this._requestUpdate(); // Re-render the closed smartfence
         }
-        // 5.3 If this is the Spacebar and we're just before or right after
+        // 5.3 If this is the Spacebar and we're just before or right after 
         // a text zone, insert the space inside the text zone
         if (this.mode === 'math' && keystroke === 'Spacebar' && !shortcut) {
             const nextSibling = this.mathlist.sibling(1);
@@ -1481,7 +1481,7 @@ class MathField {
         if ((selector && !this.$perform(selector)) || shortcut) {
             // // 6.5 insert the shortcut
             if (shortcut) {
-                // If the shortcut is a mandatory escape sequence (\}, etc...)
+                // If the shortcut is a mandatory escape sequence (\}, etc...) 
                 // don't make it undoable, this would result in syntactically incorrect
                 // formulas
                 if (!/^(\\{|\\}|\\[|\\]|\\@|\\#|\\$|\\%|\\^|\\_|\\backslash)$/.test(shortcut)) {
@@ -1588,7 +1588,7 @@ class MathField {
         if (this.pasteInProgress) {
             this.pasteInProgress = false;
             // This call was made in response to a paste event.
-            // Interpret `text` as a 'smart' expression (could be LaTeX, could be
+            // Interpret `text` as a 'smart' expression (could be LaTeX, could be 
             // UnicodeMath)
             this.mathlist.insert(text, {
                 smartFence: this.config.smartFence,
@@ -1598,9 +1598,9 @@ class MathField {
             const style = { ...this.mathlist.anchorStyle(), ...this.style };
             // Decompose the string into an array of graphemes.
             // This is necessary to correctly process what is displayed as a single
-            // glyph (a grapheme) but which is composed of multiple Unicode
+            // glyph (a grapheme) but which is composed of multiple Unicode 
             // codepoints. This is the case in particular for some emojis, such as
-            // those with a skin tone modifier, the country flags emojis or
+            // those with a skin tone modifier, the country flags emojis or 
             // compound emojis such as the professional emojis, including the
             // David Bowie emoji: 👨🏻‍🎤
             const graphemes = GraphemeSplitter.splitGraphemes(text);
@@ -1654,7 +1654,7 @@ class MathField {
                             /[0-9]/.test(c) &&
                             this.mathlist.siblings().filter(x => x.type !== 'first').length === 0) {
                             // We are inserting a digit into an empty superscript
-                            // If smartSuperscript is on, insert the digit, and
+                            // If smartSuperscript is on, insert the digit, and 
                             // exit the superscript.
                             this.mathlist.insert(c, { mode: 'math', style: style });
                             this.mathlist.moveAfterParent_();
@@ -2117,15 +2117,15 @@ class MathField {
     /**
      * This method can be invoked as a selector with {@linkcode MathField#$perform $perform("insert")}
      * or called explicitly.
-     *
+     * 
      * It will insert the specified block of text at the current insertion point,
-     * according to the insertion mode specified.
-     *
+     * according to the insertion mode specified. 
+     * 
      * After the insertion, the selection will be set according to the `selectionMode`.
      * @param {string} s - The text to be inserted
-     *
+     * 
      * @param {Object.<string, any>} [options={}]
-     *
+     * 
      * @param {'placeholder' | 'after' | 'before' | 'item'} options.selectionMode - Describes where the selection
      * will be after the insertion:
      *    * `'placeholder'`: the selection will be the first available placeholder
@@ -2135,22 +2135,22 @@ class MathField {
      *    * `'before'`: the selection will be an insertion point before
      * the item that has been inserted
      *    * `'item'`: the item that was inserted will be selected
-     *
+     * 
      * @param {'auto' | 'latex'} options.format - The format of the string `s`:
      *    * `'auto'`: the string is interpreted as a latex fragment or command)
      * (default)
      *    * `'latex'`: the string is interpreted strictly as a latex fragment
      *
-     * @param {boolean} options.focus - If true, the mathfield will be focused after
+     * @param {boolean} options.focus - If true, the mathfield will be focused after 
      * the insertion
-     *
+     * 
      * @param {boolean} options.feedback - If true, provide audio and haptic feedback
-     *
+     * 
      * @param {'text' | 'math' | ''} options.mode - 'text' or 'math'. If empty, the current mode
      * is used (default)
-     *
+     * 
      * @param {boolean} options.resetStyle - If true, the style after the insertion
-     * is the same as the style before (if false, the style after the
+     * is the same as the style before (if false, the style after the 
      * insertion is the style of the last inserted atom).
      *
      * @method MathField#$insert
@@ -2864,7 +2864,7 @@ class MathField {
                 });
                 this.mode = targetMode;
                 if (this.groupIsSelected()) {
-                    // The entire group was selected. Adjust parent mode if
+                    // The entire group was selected. Adjust parent mode if 
                     // appropriate
                     const parent = this.mathlist.parent();
                     if (parent && (parent.type === 'group' || parent.type === 'root')) {
@@ -3199,7 +3199,7 @@ class MathField {
  * @private
  */
 function _findElementWithCaret(el) {
-    if (el.classList.contains('ML__caret') ||
+    if (el.classList.contains('ML__caret') || 
         el.classList.contains('ML__text-caret') ||
         el.classList.contains('ML__command-caret')) {
         return el;
@@ -3239,7 +3239,7 @@ function nearestElementFromPoint(el, x, y) {
         const dy = Math.max(r.top - y, y - r.bottom);
         result.distance = dx * dx + dy * dy;
 
-        // Only consider children if the target is inside the (horizontal)
+        // Only consider children if the target is inside the (horizontal) 
         // bounds of the element.
         // This avoid searching the numerator/denominator when a fraction
         // is the last element in the formula.
@@ -3284,7 +3284,7 @@ function speakableText(mathfield, prefix, atoms) {
  * @param {object} target typically, a MathField
  * @param {string} command the command that invoked the change
  * @param {Atom[]} [oldMathlist=[]] the previous value of mathlist before the change
- * @param {Atom[]} [atomsToSpeak=[] ]
+ * @param {Atom[]} [atomsToSpeak=[] ] 
  * @method MathField#_onAnnounce
  * @private
  */
@@ -3320,11 +3320,7 @@ function speakableText(mathfield, prefix, atoms) {
                 MathAtom.toMathML(target.mathlist.root, target.config) +
             '</math>';
 
-    const options = this.config;
-    if (speakOptions.withHighlighting | options.speechEngine === 'amazon') {
-        options.textToSpeechMarkup = (window.sre && options.textToSpeechRules === 'sre') ? 'ssml_step' : 'ssml';
-    }
-    const text = MathAtom.toSpeakableText(atoms, options)
+        target.textarea.setAttribute('aria-label', 'after: ' + liveText)
 
         /*** FIX -- testing hack for setting braille ***/
         // target.accessibleNode.focus();

@@ -27,12 +27,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * @module mathlive
  * @example
- * // To invoke the functions in this module, import the MathLive module.
- *
+ * // To invoke the functions in this module, import the MathLive module. 
+ * 
  * import MathLive from 'dist/mathlive.mjs';
- *
+ * 
  * const markup = MathLive.latexToMarkup('e^{i\\pi}+1=0');
- *
+ * 
  */
 
 /**
@@ -114,19 +114,19 @@ function toMarkup(text, mathstyle, format, macros) {
 }
 /**
  * Convert a DOM element into an editable math field.
- *
- * After the DOM element has been created, the value `element.mathfield` will
- * return a reference to the mathfield object. This value is also returned
+ * 
+ * After the DOM element has been created, the value `element.mathfield` will 
+ * return a reference to the mathfield object. This value is also returned 
  * by `makeMathField`
- *
- * @param {Element|string} element A DOM element, for example as obtained
+ * 
+ * @param {HTMLElement|string} element A DOM element, for example as obtained 
  * by `document.getElementById()`, or the ID of a DOM element as a string.
- *
- * @param {Object<string, any>} [config={}] See {@tutorial CONFIG} for details.
+ * 
+ * @param {MathFieldConfig} [config={}] See {@tutorial CONFIG} for details.
  *
  *
  * @return {MathField}
- *
+ * 
  * Given the HTML markup:
  * ```html
  * <span id='equation'>$f(x)=sin(x)$</span>
@@ -136,7 +136,7 @@ function toMarkup(text, mathstyle, format, macros) {
  * import MathLive from 'dist/mathlive.mjs';
  * MathLive.makeMathField('equation');
  * ```
- *
+ * 
  * @function module:mathlive#makeMathField
  */
 
@@ -210,29 +210,29 @@ function latexToAST(latex, options) {
  *
  * @param {string} latex A string of valid LaTeX. It does not have to start
  * with a mode token such as a `$$` or `\(`.
- *
+ * 
  * @param {Object.<string, any>} options -
- *
+ * 
  * @param {string} [options.textToSpeechRules='mathlive'] Specify which
- * set of text to speech rules to use.
- *
+ * set of text to speech rules to use. 
+ * 
  * A value of `mathlive` indicates that
  * the simple rules built into MathLive should be used. A value of `sre`
  * indicates that the Speech Rule Engine from Volker Sorge should be used.
  * Note that SRE is not included or loaded by MathLive and for this option to
  * work SRE should be loaded separately.
- *
- * @param {string} [options.textToSpeechMarkup=''] The markup syntax to use
- * for the output of conversion to spoken text.
- *
- * Possible values are `ssml` for
+ * 
+ * @param {string} [options.textToSpeechMarkup=''] The markup syntax to use 
+ * for the output of conversion to spoken text. 
+ * 
+ * Possible values are `ssml` for 
  * the SSML markup or `mac` for the MacOS markup (e.g. `[[ltr]]`)
  *
- * @param {Object.<string, any>} [options.textToSpeechRulesOptions={}] A set of
- * key/value pairs that can be used to configure the speech rule engine.
- *
- * Which options are available depends on the speech rule engine in use. There
- * are no options available with MathLive's built-in engine. The options for
+ * @param {Object.<string, any>} [options.textToSpeechRulesOptions={}] A set of 
+ * key/value pairs that can be used to configure the speech rule engine. 
+ * 
+ * Which options are available depends on the speech rule engine in use. There 
+ * are no options available with MathLive's built-in engine. The options for 
  * the SRE engine are documented [here]{@link:https://github.com/zorkow/speech-rule-engine}
  * @return {string} The spoken representation of the input LaTeX.
  * @example
@@ -371,9 +371,9 @@ function speak(text, config) {
   }
 }
 /**
- * "Read Aloud" is an asynchronous operation that reads the
+ * "Read Aloud" is an asynchronous operation that reads the 
  * reading with synchronized highlighting
- *
+ * 
  * @param {DOMElement} element - The DOM element to highlight
  * @param {string} text - The text to speak
  * @param {object} config
@@ -555,15 +555,15 @@ function readAloud(element, text, config) {
 }
 /**
  * Return the status of a Read Aloud operation (reading with synchronized
- * highlighting).
- *
+ * highlighting). 
+ * 
  * Possible values include:
  * - `ready`
  * - `playing`
  * - `paused`
  * - `unavailable`
- *
- * **See** {@linkcode module:editor-mathfield#speakAllWithSynchronizedHighlighting speakAllWithSynchronizedHighlighting}
+ * 
+ * **See** {@linkcode module:editor-mathfield#speak speak}
  * @return {string}
  * @function module:mathlive#readAloudStatus
  */
@@ -579,8 +579,8 @@ function readAloudStatus() {
 }
 /**
  * If a Read Aloud operation is in progress, stop it.
- *
- * **See** {@linkcode module:editor/mathfield#speakAllWithSynchronizedHighlighting speakAllWithSynchronizedHighlighting}
+ * 
+ * **See** {@linkcode module:editor/mathfield#speak speak}
  * @function module:mathlive#pauseReadAloud
  */
 
@@ -599,8 +599,8 @@ function pauseReadAloud() {
 }
 /**
  * If a Read Aloud operation is paused, resume it
- *
- * **See** {@linkcode module:editor-mathfield#speakAllWithSynchronizedHighlighting speakAllWithSynchronizedHighlighting}
+ * 
+ * **See** {@linkcode module:editor-mathfield#speak speak}
  * @function module:mathlive#resumeReadAloud
  */
 
@@ -619,8 +619,8 @@ function resumeReadAloud() {
 }
 /**
  * If a Read Aloud operation is in progress, read from a specified token
- *
- * **See** {@linkcode module:editor-mathfield#speakAllWithSynchronizedHighlighting speakAllWithSynchronizedHighlighting}
+ * 
+ * **See** {@linkcode module:editor-mathfield#speak speak}
  *
  * @param {string} token
  * @param {number} [count]
@@ -688,22 +688,22 @@ function playReadAloud(token, count) {
 /**
  * Transform all the elements in the document body that contain LaTeX code
  * into typeset math.
- *
- * **Note:** This is a very expensive call, as it needs to parse the entire
- * DOM tree to determine which elements need to be processed. In most cases
+ * 
+ * **Note:** This is a very expensive call, as it needs to parse the entire 
+ * DOM tree to determine which elements need to be processed. In most cases 
  * this should only be called once per document, once the DOM has been loaded.
  * To render a specific element, use {@linkcode module:mathlive#renderMathInElement renderMathInElement()}
  *
  * **See:** {@tutorial USAGE_GUIDE}
  *
- * @param {object} [options={}] See {@linkcode module:mathlive#renderMathInElement renderMathInElement()}
+ * @param {object<string, any>} [options={}] See {@linkcode module:mathlive#renderMathInElement renderMathInElement()}
  * for details
  * @example
  * import MathLive from 'dist/mathlive.mjs';
- * document.addEventListener("load", () => {
+ * document.addEventListener("load", () => { 
  *     MathLive.renderMathInDocument();
  * });
- *
+ * 
  */
 
 
@@ -730,24 +730,24 @@ function getElement(element) {
  *
  * **See:** {@tutorial USAGE_GUIDE}
  *
- * @param {Element|string} element An HTML DOM element, or a string containing
+ * @param {HTMLElement|string} element An HTML DOM element, or a string containing
  * the ID of an element.
  * @param {object} [options={}]
  *
  * @param {string} [options.namespace=''] - Namespace that is added to `data-`
- * attributes to avoid collisions with other libraries.
- *
+ * attributes to avoid collisions with other libraries. 
+ * 
  * It is empty by default.
- *
+ * 
  * The namespace should be a string of lowercase letters.
- *
+ * 
  * @param {object[]} [options.macros={}] - Custom LaTeX macros
- *
- * @param {string[]} [options.skipTags=['noscript', 'style', 'textarea', 'pre', 'code', 'annotation', 'annotation-xml'] ]
+ * 
+ * @param {string[]} [options.skipTags=['noscript', 'style', 'textarea', 'pre', 'code', 'annotation', 'annotation-xml'] ] 
  * an array of tag names whose content will
  *  not be scanned for delimiters (unless their class matches the `processClass`
  * pattern below.
- *
+ * 
  * @param {string} [options.ignoreClass='tex2jax_ignore'] a string used as a
  * regular expression of class names of elements whose content will not be
  * scanned for delimiters
@@ -756,20 +756,20 @@ function getElement(element) {
  * regular expression of class names of elements whose content **will** be
  * scanned for delimiters,  even if their tag name or parent class name would
  * have prevented them from doing so.
- *
- * @param {string} [options.processScriptType="math/tex"] `<script>` tags of the
+ * 
+ * @param {string} [options.processScriptType="math/tex"] `<script>` tags of the 
  * indicated type will be processed while others will be ignored.
 
- *
- * @param {string} [options.renderAccessibleContent='mathml'] The format(s) in
+ * 
+ * @param {string} [options.renderAccessibleContent='mathml'] The format(s) in 
  * which to render the math for screen readers:
  * - `'mathml'` MathML
  * - `'speakable-text'` Spoken representation
- *
+ * 
  * You can pass an empty string to turn off the rendering of accessible content.
- *
+ * 
  * You can pass multiple values separated by spaces, e.g `'mathml speakable-text'`
- *
+ * 
  * @param {boolean} [options.preserveOriginalContent=true] if true, store the
  * original textual content of the element in a `data-original-content`
  * attribute. This value can be accessed for example to restore the element to
@@ -778,27 +778,27 @@ function getElement(element) {
  *      elem.innerHTML = elem.dataset.originalContent;
  * ```
  * @param {boolean} [options.readAloud=false] if true, generate markup that can
- * be read aloud later using {@linkcode module:editor-mathfield#speakAllWithSynchronizedHighlighting speakAllWithSynchronizedHighlighting}
- *
+ * be read aloud later using {@linkcode module:editor-mathfield#speak speak}
+ * 
  * @param {boolean} [options.TeX.processEnvironments=true] if false, math expression
  * that start with `\begin{` will not automatically be rendered.
- *
+ * 
  * @param {string[][]} [options.TeX.delimiters.inline=[['\\(','\\)']] ] arrays
  * of delimiter pairs that will trigger a render of the content in 'textstyle'
  *
  * @param {string[][]} [options.TeX.delimiters.display=[['$$', '$$'], ['\\[', '\\]']] ] arrays
  * of delimiter pairs that will trigger a render of the content in
  * 'displaystyle'.
- *
+ * 
  * @param {function} [renderToMarkup] a function that will convert any LaTeX found to
  * HTML markup. This is only useful to override the default MathLive renderer
- *
+ * 
  * @param {function} [renderToMathML] a function that will convert any LaTeX found to
  * MathML markup.
- *
+ * 
  * @param {function} [renderToSpeakableText] a function that will convert any LaTeX found to
  * speakable text markup.
- *
+ * 
  * @function module:mathlive#renderMathInElement
  */
 
@@ -831,7 +831,7 @@ function validateNamespace(options) {
 }
 /**
  *
- * @param {string|Element|MathField} element
+ * @param {string|HTMLElement|MathField} element
  * @param {Object.<string, any>} [options={}]
  * @param {string} options.namespace The namespace used for the `data-`
  * attributes. If you used a namespace with `renderMathInElement`, you must
@@ -857,7 +857,7 @@ function revertToOriginalContent(element, options) {
  * After calling {@linkcode module:mathlive#renderMathInElement renderMathInElement}
  * or {@linkcode module:mathlive#makeMathField makeMathField} the original content
  * can be retrived by calling this function.
- *
+ * 
  * Given the following markup:
  * ```html
  * <span id='equation'>$$f(x)=sin(x)$$</span>
@@ -871,11 +871,11 @@ function revertToOriginalContent(element, options) {
  * ```
  * $$f(x)=sin(x)$$
  * ```
- * @param {string | Element | MathField} element - A DOM element ID, a DOM
+ * @param {string | HTMLElement | MathField} element - A DOM element ID, a DOM 
  * element or a MathField.
  * @param {object} [options={}]
  * @param {string} [options.namespace=""] The namespace used for the `data-`
- * attributes.
+ * attributes. 
  * If you used a namespace with `renderMathInElement`, you must
  * use the same namespace here.
  * @return {string} the original content of the element.

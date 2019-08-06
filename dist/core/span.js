@@ -182,6 +182,7 @@ function () {
      * - fontSize: 'size1', 'size2'...
      * - color:
      * - background:
+     * @private
      */
 
   }, {
@@ -356,6 +357,7 @@ function () {
     /**
      * 
      * @param {number} left 
+     * @private
      */
 
   }, {
@@ -369,6 +371,7 @@ function () {
     /**
      * 
      * @param {number} right 
+     * @private
      */
 
   }, {
@@ -501,7 +504,7 @@ function () {
 
         if (this.attributes) {
           for (var attribute in this.attributes) {
-            if (this.attributes.hasOwnProperty(attribute)) {
+            if (Object.prototype.hasOwnProperty.call(this.attributes, attribute)) {
               result += ' ' + attribute + '="' + this.attributes[attribute] + '"';
             }
           }
@@ -561,7 +564,7 @@ function () {
           var isSelected = /ML__selected/.test(this.classes);
 
           for (var style in this.style) {
-            if (this.style.hasOwnProperty(style)) {
+            if (Object.prototype.hasOwnProperty.call(this.style, style)) {
               // Render the style property, except the background
               // of selected spans
               if (style !== 'background-color' || !isSelected) {
@@ -681,7 +684,7 @@ function () {
 
       if (this.style && span.style) {
         for (var style in this.style) {
-          if (this.style.hasOwnProperty(style) && span.style.hasOwnProperty(style)) {
+          if (Object.prototype.hasOwnProperty.call(this.style, style) && Object.prototype.hasOwnProperty.call(span.style, style)) {
             if (this.style[style] !== span.style[style]) return false;
           }
         }
@@ -1035,6 +1038,7 @@ function makeStyleWrap(type, children, fromStyle, toStyle, classes) {
  *
  * @param {Span} body
  * @param {string} svgMarkup
+ * @private
  */
 
 
@@ -1312,7 +1316,7 @@ var FONT_CLASS = {
    * @param {(string|Span[])} symbol the character for which we're seeking the font
    * @param {string} fontFamily such as 'mathbf', 'mathfrak', etc...
    * @return {string} a font name
-   * @memberof module:mathAtom
+   * @memberof module:span
    * @private
    */
 

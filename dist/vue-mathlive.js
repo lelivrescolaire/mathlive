@@ -5,7 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -47,7 +49,7 @@ var _default2 = {
     }
   },
 
-  /**
+  /*
    * To register this component, call:
    * ```
    *     import MathLive from './mathlive.mjs';
@@ -80,7 +82,7 @@ var _default2 = {
       // update the mathfield to stay in sync, but don't send back content
       // change notifications, to avoid infinite loops.
       if (newValue !== oldValue) {
-        this.$el.mathfield.latex(newValue, {
+        this.$el.mathfield.$latex(newValue, {
           suppressChangeNotifications: true
         });
       }
@@ -106,7 +108,7 @@ var _default2 = {
           // When the mathfield is updated, notify the model.
           // The initial input value is generated from the <slot>
           // content, so it may need to be updated.
-          vm.$emit('input', vm.$el.mathfield.latex());
+          vm.$emit('input', vm.$el.mathfield.$latex());
         },
         // Those asynchronous notification handlers are translated to events
         onFocus: function onFocus(_) {
@@ -148,7 +150,7 @@ var _default2 = {
     });
   },
   methods: {
-    /**
+    /*
      * 
      * @param {string} selector 
      */
@@ -156,7 +158,7 @@ var _default2 = {
       this.$el.mathfield.$perform(selector);
     },
 
-    /**
+    /*
      * @return {boolean}
      */
     hasFocus: function hasFocus() {

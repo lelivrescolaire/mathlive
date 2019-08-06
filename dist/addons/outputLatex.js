@@ -22,9 +22,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function findLongestRun(atoms, property, value) {
   var i = 0;
 
-  while (atoms[i]) {
-    if (atoms[i].type !== 'mop' && atoms[i][property] !== value) break;
-    i++;
+  if (property === 'fontFamily') {
+    while (atoms[i]) {
+      if (atoms[i].type !== 'mop' && (atoms[i].fontFamily || atoms[i].baseFontFamily) !== value) break;
+      i++;
+    }
+  } else {
+    while (atoms[i]) {
+      if (atoms[i].type !== 'mop' && atoms[i][property] !== value) break;
+      i++;
+    }
   }
 
   return i;
@@ -35,6 +42,7 @@ function findLongestRun(atoms, property, value) {
  * @param {MathAtom[]} atoms the list of atoms to transform to LaTeX
  * @param {boolean} expandMacro true if macros should be expanded
  * @result {string} a LaTeX string
+ * @private
  */
 
 
@@ -53,7 +61,9 @@ function latexifyArray(parent, properties, atoms, expandMacro) {
   var prefix = '';
   var suffix = '';
   var prop = properties[0];
-  var i = findLongestRun(atoms, prop, atoms[0][prop]);
+  var propValue = atoms[0][prop];
+  if (prop === 'fontFamily') propValue = atoms[0].fontFamily || atoms[0].baseFontFamily;
+  var i = findLongestRun(atoms, prop, propValue);
 
   if (atoms[0].mode === 'text') {
     if (prop === 'fontShape' && atoms[0].fontShape) {
@@ -91,7 +101,7 @@ function latexifyArray(parent, properties, atoms, expandMacro) {
       var allAtomsHaveShapeOrSeriesOrFontFamily = true;
 
       for (var j = 0; j < i; j++) {
-        if (!atoms[j].fontSeries && !atoms[j].fontShape && !atoms[j].fontFamily) {
+        if (!atoms[j].fontSeries && !atoms[j].fontShape && !atoms[j].fontFamily && !atoms[j].baseFontFamily) {
           allAtomsHaveShapeOrSeriesOrFontFamily = false;
           break;
         }
@@ -119,15 +129,15 @@ function latexifyArray(parent, properties, atoms, expandMacro) {
       }[atoms[0].fontSize] || '';
       prefix = '{\\' + command + ' ';
       suffix = '}';
-    } else if (prop === 'fontFamily' && atoms[0].fontFamily) {
+    } else if (prop === 'fontFamily' && (atoms[0].fontFamily || atoms[0].baseFontFamily)) {
       var _command = {
         'cmr': 'textrm',
         'cmtt': 'texttt',
         'cmss': 'textsf'
-      }[atoms[0].fontFamily] || '';
+      }[atoms[0].fontFamily || atoms[0].baseFontFamily] || '';
 
       if (!_command) {
-        prefix += '{\\fontfamily{' + atoms[0].fontFamily + '}';
+        prefix += '{\\fontfamily{' + (atoms[0].fontFamily || atoms[0].baseFontFamily) + '}';
         suffix = '}';
       } else {
         prefix = '\\' + _command + '{';
@@ -171,7 +181,7 @@ function latexifyArray(parent, properties, atoms, expandMacro) {
       prefix = '{\\' + _command2 + ' ';
       suffix = '}';
     } else if (prop === 'fontFamily' && atoms[0].fontFamily) {
-      if (!/^(math|main|mainrm)$/.test(atoms[0].fontFamily)) {
+      if (!/^(math|main)$/.test(atoms[0].fontFamily)) {
         var _command3 = {
           'cal': 'mathcal',
           'frak': 'mathfrak',
@@ -186,8 +196,18 @@ function latexifyArray(parent, properties, atoms, expandMacro) {
           prefix += '{\\fontfamily{' + atoms[0].fontFamily + '}';
           suffix = '}';
         } else {
-          prefix = '\\' + _command3 + '{';
-          suffix = '}';
+          if (/^\\operatorname{/.test(atoms[0].latex)) {
+            return atoms[0].latex + latexifyArray(parent, properties, atoms.slice(i), expandMacro);
+          }
+
+          if (!atoms[0].isFunction) {
+            prefix = '\\' + _command3 + '{';
+            suffix = '}';
+          } // These command have an implicit fontSeries/fontShape, so
+          // we're done checking properties now.
+
+
+          properties = [];
         }
       }
     }
@@ -228,7 +248,7 @@ function latexify(parent, value, expandMacro) {
       if (value.length === 0) return '';
     }
 
-    result = latexifyArray(parent, ['mode', 'fontShape', 'fontSeries', 'fontSize', 'color', 'backgroundColor', 'fontFamily'], value, expandMacro); // if (result.startsWith('{') && result.endsWith('}')) {
+    result = latexifyArray(parent, ['mode', 'color', 'backgroundColor', 'fontSize', 'fontFamily', 'fontShape', 'fontSeries'], value, expandMacro); // if (result.startsWith('{') && result.endsWith('}')) {
     //     result = result.slice(1, result.length - 1);
     // }
   } else if (typeof value === 'number' || typeof value === 'boolean') {
@@ -248,7 +268,8 @@ function latexify(parent, value, expandMacro) {
  * no longer round-trip.
  *
  * @return {string}
- * @method MathAtom#toLatex
+ * @memberof module:core/mathAtom~MathAtom
+ * @private
  */
 
 
@@ -529,7 +550,7 @@ _mathAtom.default.MathAtom.prototype.toLatex = function (expandMacro) {
         var sep = '';
 
         for (var notation in this.notation) {
-          if (this.notation.hasOwnProperty(notation) && this.notation[notation]) {
+          if (Object.prototype.hasOwnProperty.call(this.notation, notation) && this.notation[notation]) {
             result += sep + notation;
             sep = ' ';
           }

@@ -251,7 +251,7 @@ function matchCodepoint(parseMode, cp) {
 
   if (parseMode === 'math') {
     for (var p in MATH_SYMBOLS) {
-      if (MATH_SYMBOLS.hasOwnProperty(p)) {
+      if (Object.prototype.hasOwnProperty.call(MATH_SYMBOLS, p)) {
         if (MATH_SYMBOLS[p].value === s) {
           result = p;
           break;
@@ -260,7 +260,7 @@ function matchCodepoint(parseMode, cp) {
     }
   } else {
     for (var _p in TEXT_SYMBOLS) {
-      if (TEXT_SYMBOLS.hasOwnProperty(_p)) {
+      if (Object.prototype.hasOwnProperty.call(TEXT_SYMBOLS, _p)) {
         if (TEXT_SYMBOLS[_p] === s) {
           result = _p;
           break;
@@ -544,7 +544,7 @@ function unicodeToMathVariant(char) {
 
 
   for (var c in MATH_LETTER_EXCEPTIONS) {
-    if (MATH_LETTER_EXCEPTIONS.hasOwnProperty(c)) {
+    if (Object.prototype.hasOwnProperty.call(MATH_LETTER_EXCEPTIONS, c)) {
       if (MATH_LETTER_EXCEPTIONS[c] === codepoint) {
         codepoint = c;
         break;
@@ -571,6 +571,8 @@ function unicodeToMathVariant(char) {
  * return the corresponding unicode character (a string)
  * @param {string} char
  * @param {string} variant
+ * @memberof module:definitions
+ * @private
  */
 
 
@@ -808,7 +810,7 @@ function suggest(s) {
   var result = []; // Iterate over items in the dictionary
 
   for (var p in FUNCTIONS) {
-    if (FUNCTIONS.hasOwnProperty(p)) {
+    if (Object.prototype.hasOwnProperty.call(FUNCTIONS, p)) {
       if (p.startsWith(s) && !FUNCTIONS[p].infix) {
         result.push({
           match: p,
@@ -819,7 +821,7 @@ function suggest(s) {
   }
 
   for (var _p2 in MATH_SYMBOLS) {
-    if (MATH_SYMBOLS.hasOwnProperty(_p2)) {
+    if (Object.prototype.hasOwnProperty.call(MATH_SYMBOLS, _p2)) {
       if (_p2.startsWith(s)) {
         result.push({
           match: _p2,
@@ -3300,6 +3302,8 @@ defineFunction(['\\hspace', '\\hspace*' // \hspace* inserts a non-breakable spac
  * If possible, i.e. if they are all simple atoms, return a string made up of
  * their body
  * @param {object[]} atoms
+ * @memberof module:definitions
+ * @private
  */
 
 function getSimpleString(atoms) {

@@ -24,6 +24,7 @@ exports.default = void 0;
  * @constant
  * @type {Object.<string, string>}
  * @memberof module:color
+ * @private
  */
 var MATHEMATICA_COLORS = {
   'm0': '#3f3d99',
@@ -109,6 +110,7 @@ var LINE_COLORS = ['#cc2428', // red
  * @constant NAMED_COLORS
  * @memberof module:color
  * @type {Object.<string, string>}
+ * @private
  */
 
 var NAMED_COLORS = {

@@ -78,6 +78,7 @@ function () {
      * Return the next char and advance
      * @return {string}
      * @method module:core/lexer#Lexer#get
+     * @private
      */
 
   }, {

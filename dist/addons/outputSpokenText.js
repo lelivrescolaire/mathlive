@@ -36,6 +36,8 @@ var PRONUNCIATION = {
   '\\imaginaryI': 'eye ',
   '\\sum': 'Summation ',
   '\\prod': 'Product ',
+  'a': '<phoneme alphabet="ipa" ph="eɪ">a</phoneme>',
+  'A': 'capital <phoneme alphabet="ipa" ph="eɪ">A</phoneme>',
   '+': 'plus ',
   '-': 'minus ',
   ';': '<break time="150ms"/> semi-colon <break time="150ms"/>',
@@ -620,21 +622,19 @@ _mathAtom.default.toSpeakableFragment = function (atom, options) {
   return result;
 };
 /**
- * @param {MathAtom[]}  [atoms] The atoms to represent as speakable text.
+ * @param {MathAtom[]}  atoms The atoms to represent as speakable text.
  * If omitted, `this` is used.
- * @param {Object.<string, any>} [options]
+ * @param {Object.<string, any>} speechOptions
+ * @private
 */
 
 
-_mathAtom.default.toSpeakableText = function (atoms, options) {
-  if (!options) {
-    options = {
-      textToSpeechMarkup: '',
-      // no markup
-      textToSpeechRules: 'mathlive'
-    };
-  }
-
+_mathAtom.default.toSpeakableText = function (atoms, speechOptions) {
+  var options = speechOptions ? JSON.parse(JSON.stringify(speechOptions)) : {
+    textToSpeechMarkup: '',
+    // no markup
+    textToSpeechRules: 'mathlive'
+  };
   options.speechMode = 'math';
 
   if (window.sre && options.textToSpeechRules === 'sre') {
@@ -661,7 +661,7 @@ _mathAtom.default.toSpeakableText = function (atoms, options) {
       return window.sre.System.getInstance().toSpeech(mathML);
     }
 
-    return ''; // return window.sre.toSpeech(MathAtom.toMathML(atoms));
+    return '';
   }
 
   var result = _mathAtom.default.toSpeakableFragment(atoms, options);

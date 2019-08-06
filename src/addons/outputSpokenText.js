@@ -34,7 +34,8 @@ const PRONUNCIATION = {
     '\\sum':        'Summation ',
     '\\prod':       'Product ',
 
-
+    'a':            '<phoneme alphabet="ipa" ph="eɪ">a</phoneme>',
+    'A':            'capital <phoneme alphabet="ipa" ph="eɪ">A</phoneme>',
     '+':            'plus ',
     '-':            'minus ',
     ';':            '<break time="150ms"/> semi-colon <break time="150ms"/>',
@@ -537,17 +538,16 @@ MathAtom.toSpeakableFragment = function(atom, options) {
 
 
 /**
- * @param {MathAtom[]}  [atoms] The atoms to represent as speakable text.
+ * @param {MathAtom[]}  atoms The atoms to represent as speakable text.
  * If omitted, `this` is used.
- * @param {Object.<string, any>} [options]
+ * @param {Object.<string, any>} speechOptions
+ * @private
 */
-MathAtom.toSpeakableText = function(atoms, options) {
-    if (!options) {
-        options = {
-            textToSpeechMarkup: '',     // no markup
-            textToSpeechRules: 'mathlive'
-        }
-    }
+MathAtom.toSpeakableText = function(atoms, speechOptions) {
+    const options = speechOptions ? JSON.parse(JSON.stringify(speechOptions)) : {
+        textToSpeechMarkup: '',     // no markup
+        textToSpeechRules: 'mathlive'
+    };  
     options.speechMode = 'math';
 
     if (window.sre && options.textToSpeechRules === 'sre') {
@@ -568,7 +568,6 @@ MathAtom.toSpeakableText = function(atoms, options) {
             return window.sre.System.getInstance().toSpeech(mathML);
         }
         return '';
-        // return window.sre.toSpeech(MathAtom.toMathML(atoms));
     }
 
     let result = MathAtom.toSpeakableFragment(atoms, options);

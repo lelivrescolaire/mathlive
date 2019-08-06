@@ -431,6 +431,7 @@ function getArg(ast, index) {
  * Given a canonical name, return its precedence
  * @param {string} canonicalName, for example "and"
  * @return {number}
+ * @private
  */
 
 
@@ -449,6 +450,7 @@ function getAssociativity(canonicalName) {
  *
  * @param {string} name function canonical name
  * @return {string}
+ * @private
  */
 
 
@@ -465,6 +467,7 @@ function getLatexTemplateForFunction(name) {
  *
  * @param {string} name symbol name, e.g. "alpha"
  * @return {string}
+ * @private
  */
 
 
@@ -502,6 +505,7 @@ function isFunction(canonicalName) {
  *
  * @param {string} latex, for example '\\times'
  * @return {string} the canonical name for the input, for example '*'
+ * @private
  */
 
 
@@ -530,6 +534,7 @@ function getCanonicalName(latex) {
  * or -1 if not an operator
  * @param {object} atom
  * @return {number}
+ * @private
  */
 
 
@@ -684,6 +689,7 @@ function getString(atom) {
  *
  * @param {object} expr - Abstract Syntax Tree object
  * @return {string} A string, the symbol, or undefined
+ * @private
  */
 
 
@@ -694,6 +700,7 @@ function asSymbol(node) {
  *
  * @param {object} node - Abstract Syntax Tree node
  * @return {number} A JavaScript number, the value of the AST or NaN
+ * @private
  * @private
  */
 
@@ -748,6 +755,7 @@ function hasSub(node) {
  * @param {object} expr
  * @param {string} type
  * @param {string} value
+ * @private
  */
 
 
@@ -769,6 +777,7 @@ function isAtom(expr, type, value) {
  * 
  * @param {string} functionName 
  * @param {object} params 
+ * @private
  */
 
 
@@ -818,6 +827,7 @@ function wrapNum(num) {
  * Return the negative of the expression. Usually { fn:'negate', arg }
  * but for numbers, the negated number
  * @param {object} node
+ * @private
  */
 
 
@@ -851,6 +861,7 @@ function nextIsSupsub(expr) {
  * or to a following 'msubsup' atom.
  * After the call, the index points to the next atom to process.
  * @param {object} expr
+ * @private
  */
 
 
@@ -920,6 +931,7 @@ function parseSupsub(expr, options) {
 }
 /**
  * Parse postfix operators, such as "!" (factorial)
+ * @private
  */
 
 
@@ -971,6 +983,7 @@ function parsePostfix(expr, options) {
  *
  * This function handles all three cases
  *
+ * @private
  */
 
 
@@ -1138,6 +1151,7 @@ function nextIsDigraph(expr, digraph) {
  * =:
  * °C U+2103
  * °F U+2109
+ * @private
  *
 */
 
@@ -1654,6 +1668,7 @@ function parseExpression(expr, options) {
  * Return a string escaped as necessary to comply with the JSON format
  * @param {string} s
  * @return {string}
+ * @private
  */
 
 
@@ -1665,6 +1680,7 @@ function escapeText(s) {
  *
  * @return {object}
  * @method MathAtom#toAST
+ * @private
  */
 
 
@@ -1805,7 +1821,7 @@ _mathAtom.default.MathAtom.prototype.toAST = function (options) {
     case 'enclose':
       // result = '<menclose notation="';
       // for (const notation in this.notation) {
-      //     if (this.notation.hasOwnProperty(notation) &&
+      //     if (Object.prototype.hasOwnProperty.call(this.notation, notation) &&
       //         this.notation[notation]) {
       //         result += sep + notation;
       //         sep = ' ';
@@ -2001,6 +2017,7 @@ function filterPresentationAtoms(atoms) {
  * <sentence> := ((<text>) <expression>)+
  * @param {object} expr 
  * @return  {object}
+ * @private
  */
 
 
@@ -2037,6 +2054,7 @@ function parseSentence(expr, options) {
 /**
  * @param {Atoms[]} atoms 
  * @return  {object}
+ * @private
  */
 
 
@@ -2053,6 +2071,7 @@ _mathAtom.default.toAST = function (atoms, options) {
  *
  * @param {string} fence - The fence to wrap around the arguments
  * @return {string} - A string wrapped in the fence
+ * @private
  */
 
 
@@ -2101,6 +2120,7 @@ function wrapFence(fence) {
  * 1233333 -> 12(3)
  * @param {string} m
  * @param {Object.<string, any>} config
+ * @private
  */
 
 
@@ -2147,6 +2167,7 @@ function parseFloatToPrecision(num) {
 * @param {string|number} num - A number, represented as a string (e.g. "-12.45"
 *  particularly useful for arbitrary precision numbers) or a number (-12.45)
 * @return {string} A LaTeX representation of the AST
+* @private
 */
 
 
@@ -2347,6 +2368,7 @@ function numberAsLatex(num, config) {
 *
 * @param {object} ast - Abstract Syntax Tree object (in canonical form)
 * @return {string} A LaTeX representation of the AST
+* @private
 */
 
 

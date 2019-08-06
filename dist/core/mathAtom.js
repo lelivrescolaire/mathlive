@@ -129,8 +129,7 @@ var SIZING_MULTIPLIER = {
  * right after this element, it automatically moves to the last position
  * inside this element.
  * 
- * @class module:core/mathatom#MathAtom
- * @global
+ * @class
  * @private
  */
 
@@ -554,6 +553,7 @@ function () {
      *
      * @return {MathAtom[]}
      * @method MathAtom#filter
+     * @private
      */
 
   }, {
@@ -976,6 +976,7 @@ function () {
      * also be set to 'auto', which indicates it should use the current mathstyle
      *
      * @method MathAtom#decomposeGenfrac
+     * @private
      */
 
   }, {
@@ -1116,7 +1117,7 @@ function () {
       leftDelim.applyStyle(this.getStyle());
       rightDelim.applyStyle(this.getStyle());
       var result = makeOrd([leftDelim, frac, rightDelim], context.parentSize !== context.size ? 'sizing reset-' + context.parentSize + ' ' + context.size : '');
-      return result;
+      return this.bind(context, result);
     }
     /**
       *  \left....\right
@@ -1126,7 +1127,8 @@ function () {
       * leftDelim (resp. rightDelim) will be undefined. We still need to handle
       * those cases.
       *
-     * @method MathAtom#decomposeLeftright
+      * @method MathAtom#decomposeLeftright
+      * @private
       */
 
   }, {
@@ -1263,7 +1265,7 @@ function () {
       var body = makeVlist(context, [inner, lineClearance, line, ruleWidth]);
 
       if (!this.index) {
-        return makeOrd([delim, body], 'sqrt');
+        return this.bind(context, makeOrd([delim, body], 'sqrt'));
       } // Handle the optional root index
       // The index is always in scriptscript style
 
@@ -1282,7 +1284,7 @@ function () {
       var rootVlist = makeVlist(context, [root], 'shift', -toShift); // Add a class surrounding it so we can add on the appropriate
       // kerning
 
-      return makeOrd([makeSpan(rootVlist, 'root'), delim, body], 'sqrt');
+      return this.bind(context, makeOrd([makeSpan(rootVlist, 'root'), delim, body], 'sqrt'));
     }
   }, {
     key: "decomposeAccent",
@@ -1335,6 +1337,7 @@ function () {
      * \overline and \underline
      *
      * @method MathAtom#decomposeLine
+     * @private
      */
 
   }, {
@@ -1381,6 +1384,7 @@ function () {
      * \rule
      * @memberof MathAtom
      * @instance
+     * @private
      */
 
   }, {
@@ -1672,6 +1676,7 @@ function () {
      * calculate the placement of the supsub
      * @return {Span[]}
      * @method MathAtom#decompose
+     * @private
      */
 
   }, {
@@ -1935,6 +1940,7 @@ function () {
      * @param {Context} context
      * @param {Span} span
      * @method MathAtom#bind
+     * @private
      */
 
   }, {
@@ -1959,6 +1965,7 @@ function () {
      * @param {(string|Span[])} body
      * @return {Span}
      * @method MathAtom#makeSpan
+     * @private
      */
 
   }, {

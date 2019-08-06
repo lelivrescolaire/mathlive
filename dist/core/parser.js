@@ -17,7 +17,9 @@ var _mathAtom = _interopRequireDefault(require("./mathAtom.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -128,7 +130,8 @@ function () {
     /**
      * Return the last atom of the math list
      * If there isn't one, insert a `msubsup` and return it.
-     * @method Parser#lastMathAtom
+     * @method module:core/parser#Parser#lastMathAtom
+     * @private
      */
 
   }, {
@@ -151,6 +154,7 @@ function () {
      * @param {string} type
      * @return {boolean} True if the next token is of the specified type
      * @method module:core/parser#Parser#hasToken
+     * @private
      */
 
   }, {
@@ -165,6 +169,7 @@ function () {
      * specified value. If `value` is empty, return true if the token is of type
      * `'literal'`
      * @method Parser#hasLiteral
+     * @private
      */
 
   }, {
@@ -178,6 +183,7 @@ function () {
      * @return {boolean} True if the next token is of type `'literal` and matches
      * the specified regular expression pattern.
      * @method module:core/parser#Parser#hasLiteralPattern
+     * @private
      */
 
   }, {
@@ -227,7 +233,7 @@ function () {
 
       return false;
     }
-    /**
+    /*
      * Return the appropriate value for a placeholder, either a default
      * one, or if a value was provided for #? via args, that value.
      */
@@ -272,6 +278,7 @@ function () {
     /**
      * @param {string} type
      * @method module:core/parser#Parser#parseToken
+     * @private
      */
 
   }, {
@@ -1412,17 +1419,17 @@ function () {
                   if (explicitGroup) {
                     // Create a temporary style
                     var saveStyle = this.style;
-                    this.style = _objectSpread({}, this.style, attributes);
+                    this.style = _objectSpread({}, this.style, {}, attributes);
                     result = this.scanArg(explicitGroup);
                     this.style = saveStyle;
                   } else {
                     // Merge the new style info with the current style
-                    this.style = _objectSpread({}, this.style, attributes);
+                    this.style = _objectSpread({}, this.style, {}, attributes);
                   }
 
                   this.parseMode = savedMode;
                 } else {
-                  result = new MathAtom(this.parseMode, info.type, explicitGroup ? this.scanArg(explicitGroup) : null, _objectSpread({}, this.style, attributes));
+                  result = new MathAtom(this.parseMode, info.type, explicitGroup ? this.scanArg(explicitGroup) : null, _objectSpread({}, this.style, {}, attributes));
                 }
               } else {
                 var style = _objectSpread({}, this.style);
@@ -1515,7 +1522,7 @@ function () {
 
       return result;
     }
-    /**
+    /*
      * Attempt to scan the macro name and return an atom list if successful.
      * Otherwise, it wasn't a macro.
      */

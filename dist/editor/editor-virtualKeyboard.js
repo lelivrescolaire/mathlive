@@ -23,6 +23,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var KEYBOARDS = {
   'numeric': {
     tooltip: 'keyboard.tooltip.numeric',
@@ -841,6 +847,7 @@ function expandLayerMarkup(mf, layer) {
  * @param {object} mf
  * @param {string} theme
  * @result {} A DOM element
+ * @private
  */
 
 
@@ -918,26 +925,81 @@ function make(mf, theme) {
     }
   }
 
-  ALT_KEYS = {};
-  ALT_KEYS = Object.assign({}, ALT_KEYS_BASE);
-
-  for (var key in ALT_KEYS) {
-    if (ALT_KEYS.hasOwnProperty(key)) {
-      ALT_KEYS[key] = ALT_KEYS[key].slice();
-    }
-  }
-
+  ALT_KEYS = _objectSpread({}, ALT_KEYS_BASE);
+  Object.keys(ALT_KEYS).forEach(function (key) {
+    ALT_KEYS[key] = ALT_KEYS[key].slice();
+  });
   var upperAlpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   var lowerAlpha = 'abcdefghijklmnopqrstuvwxyz';
   var digits = '0123456789';
 
   for (var i = 0; i < 26; i++) {
-    var _key = upperAlpha[i];
+    var key = upperAlpha[i];
+    if (!ALT_KEYS[key]) ALT_KEYS[key] = [];
+    ALT_KEYS[key].unshift({
+      latex: '\\mathbb{' + key + '}',
+      aside: 'blackboard',
+      insert: '\\mathbb{' + key + '}'
+    });
+    ALT_KEYS[key].unshift({
+      latex: '\\mathbf{' + key + '}',
+      aside: 'bold',
+      insert: '\\mathbf{' + key + '}'
+    });
+    ALT_KEYS[key].unshift({
+      latex: '\\mathsf{' + key + '}',
+      aside: 'sans',
+      insert: '\\mathsf{' + key + '}'
+    });
+    ALT_KEYS[key].unshift({
+      latex: '\\mathtt{' + key + '}',
+      aside: 'monospace',
+      insert: '\\mathtt{' + key + '}'
+    });
+    ALT_KEYS[key].unshift({
+      latex: '\\mathcal{' + key + '}',
+      aside: 'script',
+      insert: '\\mathcal{' + key + '}'
+    });
+    ALT_KEYS[key].unshift({
+      latex: '\\mathfrak{' + key + '}',
+      aside: 'fraktur',
+      insert: '\\mathfrak{' + key + '}'
+    });
+    ALT_KEYS[key].unshift({
+      latex: '\\mathbb{' + lowerAlpha[i] + '}',
+      aside: 'blackboard',
+      insert: '\\mathbb{' + lowerAlpha[i] + '}'
+    });
+    ALT_KEYS[key].unshift({
+      latex: '\\mathbf{' + lowerAlpha[i] + '}',
+      aside: 'bold',
+      insert: '\\mathbf{' + lowerAlpha[i] + '}'
+    });
+    ALT_KEYS[key].unshift({
+      latex: '\\mathsf{' + lowerAlpha[i] + '}',
+      aside: 'sans',
+      insert: '\\mathsf{' + lowerAlpha[i] + '}'
+    });
+    ALT_KEYS[key].unshift({
+      latex: '\\mathcal{' + lowerAlpha[i] + '}',
+      aside: 'script',
+      insert: '\\mathcal{' + lowerAlpha[i] + '}'
+    });
+    ALT_KEYS[key].unshift({
+      latex: '\\mathfrak{' + lowerAlpha[i] + '}',
+      aside: 'fraktur',
+      insert: '\\mathfrak{' + lowerAlpha[i] + '}'
+    });
+  }
+
+  for (var _i = 0; _i <= 26; _i++) {
+    var _key = lowerAlpha[_i];
     if (!ALT_KEYS[_key]) ALT_KEYS[_key] = [];
 
     ALT_KEYS[_key].unshift({
-      latex: '\\mathbb{' + _key + '}',
-      aside: 'blackboard',
+      latex: '\\mathsf{' + _key + '}',
+      aside: 'sans',
       insert: '\\mathbb{' + _key + '}'
     });
 
@@ -948,21 +1010,9 @@ function make(mf, theme) {
     });
 
     ALT_KEYS[_key].unshift({
-      latex: '\\mathsf{' + _key + '}',
-      aside: 'sans',
-      insert: '\\mathsf{' + _key + '}'
-    });
-
-    ALT_KEYS[_key].unshift({
       latex: '\\mathtt{' + _key + '}',
       aside: 'monospace',
       insert: '\\mathtt{' + _key + '}'
-    });
-
-    ALT_KEYS[_key].unshift({
-      latex: '\\mathcal{' + _key + '}',
-      aside: 'script',
-      insert: '\\mathcal{' + _key + '}'
     });
 
     ALT_KEYS[_key].unshift({
@@ -970,52 +1020,26 @@ function make(mf, theme) {
       aside: 'fraktur',
       insert: '\\mathfrak{' + _key + '}'
     });
-
-    ALT_KEYS[_key].unshift({
-      latex: '\\mathbb{' + lowerAlpha[i] + '}',
-      aside: 'blackboard',
-      insert: '\\mathbb{' + lowerAlpha[i] + '}'
-    });
-
-    ALT_KEYS[_key].unshift({
-      latex: '\\mathbf{' + lowerAlpha[i] + '}',
-      aside: 'bold',
-      insert: '\\mathbf{' + lowerAlpha[i] + '}'
-    });
-
-    ALT_KEYS[_key].unshift({
-      latex: '\\mathsf{' + lowerAlpha[i] + '}',
-      aside: 'sans',
-      insert: '\\mathsf{' + lowerAlpha[i] + '}'
-    });
-
-    ALT_KEYS[_key].unshift({
-      latex: '\\mathcal{' + lowerAlpha[i] + '}',
-      aside: 'script',
-      insert: '\\mathcal{' + lowerAlpha[i] + '}'
-    });
-
-    ALT_KEYS[_key].unshift({
-      latex: '\\mathfrak{' + lowerAlpha[i] + '}',
-      aside: 'fraktur',
-      insert: '\\mathfrak{' + lowerAlpha[i] + '}'
-    });
   }
 
-  for (var _i = 0; _i <= 26; _i++) {
-    var _key2 = lowerAlpha[_i];
-    if (!ALT_KEYS[_key2]) ALT_KEYS[_key2] = [];
-
-    ALT_KEYS[_key2].unshift({
-      latex: '\\mathsf{' + _key2 + '}',
-      aside: 'sans',
-      insert: '\\mathbb{' + _key2 + '}'
-    });
+  for (var _i2 = 0; _i2 < 10; _i2++) {
+    var _key2 = digits[_i2];
+    if (!ALT_KEYS[_key2]) ALT_KEYS[_key2] = []; // The mathbb font does not appear to include digits,
+    // although it's supposed to.
+    // ALT_KEYS[key].push({
+    //         latex: '\\underset{\\textsf{\\footnotesize blackboard}}{\\mathbb{' + key + '}}',
+    //         insert: '\\mathbb{' + key + '}}'});
 
     ALT_KEYS[_key2].unshift({
       latex: '\\mathbf{' + _key2 + '}',
       aside: 'bold',
       insert: '\\mathbf{' + _key2 + '}'
+    });
+
+    ALT_KEYS[_key2].unshift({
+      latex: '\\mathsf{' + _key2 + '}',
+      aside: 'sans',
+      insert: '\\mathsf{' + _key2 + '}'
     });
 
     ALT_KEYS[_key2].unshift({
@@ -1025,48 +1049,15 @@ function make(mf, theme) {
     });
 
     ALT_KEYS[_key2].unshift({
+      latex: '\\mathcal{' + _key2 + '}',
+      aside: 'script',
+      insert: '\\mathcal{' + _key2 + '}'
+    });
+
+    ALT_KEYS[_key2].unshift({
       latex: '\\mathfrak{' + _key2 + '}',
       aside: 'fraktur',
       insert: '\\mathfrak{' + _key2 + '}'
-    });
-  }
-
-  for (var _i2 = 0; _i2 < 10; _i2++) {
-    var _key3 = digits[_i2];
-    if (!ALT_KEYS[_key3]) ALT_KEYS[_key3] = []; // The mathbb font does not appear to include digits,
-    // although it's supposed to.
-    // ALT_KEYS[key].push({
-    //         latex: '\\underset{\\textsf{\\footnotesize blackboard}}{\\mathbb{' + key + '}}',
-    //         insert: '\\mathbb{' + key + '}}'});
-
-    ALT_KEYS[_key3].unshift({
-      latex: '\\mathbf{' + _key3 + '}',
-      aside: 'bold',
-      insert: '\\mathbf{' + _key3 + '}'
-    });
-
-    ALT_KEYS[_key3].unshift({
-      latex: '\\mathsf{' + _key3 + '}',
-      aside: 'sans',
-      insert: '\\mathsf{' + _key3 + '}'
-    });
-
-    ALT_KEYS[_key3].unshift({
-      latex: '\\mathtt{' + _key3 + '}',
-      aside: 'monospace',
-      insert: '\\mathtt{' + _key3 + '}'
-    });
-
-    ALT_KEYS[_key3].unshift({
-      latex: '\\mathcal{' + _key3 + '}',
-      aside: 'script',
-      insert: '\\mathcal{' + _key3 + '}'
-    });
-
-    ALT_KEYS[_key3].unshift({
-      latex: '\\mathfrak{' + _key3 + '}',
-      aside: 'fraktur',
-      insert: '\\mathfrak{' + _key3 + '}'
     });
   }
 

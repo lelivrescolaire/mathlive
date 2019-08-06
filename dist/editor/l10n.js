@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", {
 exports.l10n = l10n;
 exports.default = void 0;
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -47,7 +49,7 @@ l10n.plural = function (value, s, options) {
 
   return result.split(';')[rule] || result.split(';')[0];
 };
-/**
+/*
  * Two forms for this function:
  * - merge(locale, strings)
  * Merge a dictionary of keys -> values for the specified locale
@@ -62,16 +64,13 @@ l10n.merge = function (locale, strings) {
     var savedLocale = l10n._locale;
     l10n.locale = locale; // Load the necessary json file
 
-    l10n.strings[locale] = _objectSpread({}, l10n.strings[locale], strings);
+    l10n.strings[locale] = _objectSpread({}, l10n.strings[locale], {}, strings);
     l10n.locale = savedLocale;
   } else if (locale && !strings) {
     strings = locale;
-
-    for (var l in strings) {
-      if (strings.hasOwnProperty(l)) {
-        l10n.merge(l, strings[l]);
-      }
-    }
+    Object.keys(strings).forEach(function (l) {
+      return l10n.merge(l, strings[l]);
+    });
   }
 }; // Add getter and setter for the _locale property of l10n
 
@@ -158,6 +157,17 @@ l10n.strings = {
     "tooltip.redo": "Wiederholen",
     "tooltip.toggle virtual keyboard": "Virtuelle Tastatur umschalten",
     "tooltip.undo": "Widerrufen"
+  },
+  "el": {
+    "keyboard.tooltip.functions": "συναρτήσεις",
+    "keyboard.tooltip.greek": "ελληνικά γράμματα",
+    "keyboard.tooltip.command": "Λειτουργία εντολών LaTeX",
+    "keyboard.tooltip.numeric": "Αριθμητικός",
+    "keyboard.tooltip.roman": "Σύμβολα και ρωμαϊκά γράμματα",
+    "tooltip.copy to clipboard": "Αντιγραφή στο πρόχειρο",
+    "tooltip.redo": "Ξανακάνω",
+    "tooltip.toggle virtual keyboard": "Εναλλαγή εικονικού πληκτρολογίου",
+    "tooltip.undo": "Ξεκάνω"
   },
   "es": {
     "keyboard.tooltip.functions": "Funciones",

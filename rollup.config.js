@@ -16,13 +16,12 @@ export default [{
       }
     }),
     copy({ 
-      targets: ["css/fonts"],
-      verbose: true
+      targets: [
+        { src: "css/fonts", dest: "dist" },
+        { src: "src", dest: "dist" },
+        { src: "build/types.d.ts", dest: "dist", rename: "mathlive.d.ts" }
+      ]
     }),
-    copy({ 
-      targets: ["src"],
-      verbose: true
-    })
   ],
   output: [
     {

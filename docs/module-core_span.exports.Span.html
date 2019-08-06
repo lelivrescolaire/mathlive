@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"><title>editor/mathfield - MathLive Docs</title><meta name="description" content="Beautifully typeset math made easy"><meta name="keywords" content="latex, tex, math, typesetting, documentation, docs">
+    <meta charset="utf-8"><title>Span - MathLive Docs</title><meta name="description" content="Beautifully typeset math made easy"><meta name="keywords" content="latex, tex, math, typesetting, documentation, docs">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -58,7 +58,7 @@ writeCookie('symbol-access', 'private')
 
 <main id="main">
     
-        <h1 class="page-title">editor/mathfield</h1>
+        <h1 class="page-title">Span</h1>
     
 
     
@@ -70,8 +70,16 @@ writeCookie('symbol-access', 'private')
 
 <header>
     
+        <h2>
+            <span class="ancestors"><a href="module-core_span.html">core/span</a>.</span>
         
-            
+        Span
+        </h2>
+        
+            <div class="class-description"><p>A span is the most elementary element that can be rendered.
+It is composed of an optional body of text and an optional list
+of children (other spans). Each span can be decorated with
+CSS classes and style attributes.</p></div>
         
     
 </header>
@@ -80,29 +88,332 @@ writeCookie('symbol-access', 'private')
     <div class="container-overview">
     
         
-            <div class="description"><p>See <a href="MathField.html"><code>MathField</code></a></p></div>
-        
+<div class='method private'>
 
-        
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="Span">new Span<span class="signature">(content<span class="signature-type">: string | Span | Span[]</span>, classes<span class="signature-type">: string</span>)</span><span class="type-signature">:  void</span><span class="type-signature"><span class="attrib">private</span></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+    
+
+    
+        <!-- <h5>Parameters</h5> -->
+        <div class='param'>
+
+    
+
+        <div class="signature">
             
-<div class='method'>
+                <span class="name"><code>content</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Span</span>
+|
+
+<span class="param-type">Span[]</span>
 
 
+            
+            </span>
+
+            
+
+            
+
+            
+                    <p class="description last">
+                        <p>the items 'contained' by this node</p>
+                    </p>
+                    
+            
+        </div>
+
+    
+
+        <div class="signature">
+            
+                <span class="name"><code>classes</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
 
 
+            
+            </span>
 
+            
 
+            
 
+            
+                    <p class="description last">
+                        <p>list of classes attributes associated with this node</p>
+                    </p>
+                    
+            
+        </div>
 
-
+    
+</div>
 
     
 
     
+    
+        &rarr; 
+    
+            
+<span class="param-desc">
+    
+        : 
+<span class="param-type">void</span>
+
+
+        &nbsp;&nbsp;
+    
+    
+</span>
+
+
+
+        
 
     
 
+
+    <h5 class="subsection-title">Properties</h5>
+
     
+
+
+    
+
+        <div class="property">
+            
+                <span class="name"><code>type</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+
+            
+
+            <span class="description last"><p>For example, <code>'command'</code>, <code>'mrel'</code>, etc...</p>
+                
+            </span>
+        </div>
+
+    
+
+        <div class="property">
+            
+                <span class="name"><code>classes</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+
+            
+
+            <span class="description last"><p>A string of space separated CSS classes
+associated with this element</p>
+                
+            </span>
+        </div>
+
+    
+
+        <div class="property">
+            
+                <span class="name"><code>cssID</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+
+            
+
+            <span class="description last"><p>A CSS ID assigned to this span (optional)</p>
+                
+            </span>
+        </div>
+
+    
+
+        <div class="property">
+            
+                <span class="name"><code>children</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">Span[]</span>
+
+
+            
+            </span>
+
+            
+
+            
+
+            <span class="description last"><p>An array, potentially empty, of spans which
+this span encloses</p>
+                
+            </span>
+        </div>
+
+    
+
+        <div class="property">
+            
+                <span class="name"><code>body</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+
+            
+
+            <span class="description last"><p>Content of this span. Can be empty.</p>
+                
+            </span>
+        </div>
+
+    
+
+        <div class="property">
+            
+                <span class="name"><code>style</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">[string]:any</span>
+
+
+            
+            </span>
+
+            
+
+            
+
+            <span class="description last"><p>A set of key/value pairs specifying CSS properties
+associated with this element.</p>
+                
+            </span>
+        </div>
+
+    
+
+        <div class="property">
+            
+                <span class="name"><code>height</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">number</span>
+
+
+            
+            </span>
+
+            
+
+            
+
+            <span class="description last"><p>The measurement from baseline to top, in em.</p>
+                
+            </span>
+        </div>
+
+    
+
+        <div class="property">
+            
+                <span class="name"><code>depth</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">number</span>
+
+
+            
+            </span>
+
+            
+
+            
+
+            <span class="description last"><p>The measurement from baseline to bottom, in em.</p>
+                
+            </span>
+        </div>
+
+    
+
+
 
 
 <dl class="details">
@@ -157,7 +468,6 @@ writeCookie('symbol-access', 'private')
 
 </div>
 
-        
     
     </div>
 
@@ -173,398 +483,6 @@ writeCookie('symbol-access', 'private')
 
     
 
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class='method private'>
-
-    
-
-    <h4 class="name" id="nearestElementFromPoint">nearestElementFromPoint<span class="signature">(el<span class="signature-type">: HTMLElement</span>, x<span class="signature-type">: number</span>, y<span class="signature-type">: number</span>)</span><span class="type-signature"></span><span class="type-signature"><span class="attrib">private</span></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Return a tuple of an element and a distance from point (x, y)</p>
-</div>
-
-
-
-
-
-
-
-
-    
-
-    
-        <!-- <h5>Parameters</h5> -->
-        <div class='param'>
-
-    
-
-        <div class="signature">
-            
-                <span class="name"><code>el</code></span>
-            
-
-            <span class="type">
-            
-                : 
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </span>
-
-            
-
-            
-
-            
-        </div>
-
-    
-
-        <div class="signature">
-            
-                <span class="name"><code>x</code></span>
-            
-
-            <span class="type">
-            
-                : 
-<span class="param-type">number</span>
-
-
-            
-            </span>
-
-            
-
-            
-
-            
-        </div>
-
-    
-
-        <div class="signature">
-            
-                <span class="name"><code>y</code></span>
-            
-
-            <span class="type">
-            
-                : 
-<span class="param-type">number</span>
-
-
-            
-            </span>
-
-            
-
-            
-
-            
-        </div>
-
-    
-</div>
-
-    
-
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-
-</div>
-
-        
-            
-<div class='method private'>
-
-    
-
-    <h4 class="name" id="~_findElementWithCaret">_findElementWithCaret<span class="signature">(el<span class="signature-type">: DomElement</span>)</span><span class="type-signature"></span><span class="type-signature"><span class="attrib">private</span><span class="attrib">inner</span></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Utility function that returns the element which has the caret</p>
-</div>
-
-
-
-
-
-
-
-
-    
-
-    
-        <!-- <h5>Parameters</h5> -->
-        <div class='param'>
-
-    
-
-        <div class="signature">
-            
-                <span class="name"><code>el</code></span>
-            
-
-            <span class="type">
-            
-                : 
-<span class="param-type">DomElement</span>
-
-
-            
-            </span>
-
-            
-
-            
-
-            
-        </div>
-
-    
-</div>
-
-    
-
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-
-</div>
-
-        
-            
-<div class='method private'>
-
-    
-
-    <h4 class="name" id="~validateStyle">validateStyle<span class="signature">(style<span class="signature-type">: object</span>)</span><span class="type-signature"></span><span class="type-signature"><span class="attrib">private</span><span class="attrib">inner</span></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Validate a style specification object</p>
-</div>
-
-
-
-
-
-
-
-
-    
-
-    
-        <!-- <h5>Parameters</h5> -->
-        <div class='param'>
-
-    
-
-        <div class="signature">
-            
-                <span class="name"><code>style</code></span>
-            
-
-            <span class="type">
-            
-                : 
-<span class="param-type">object</span>
-
-
-            
-            </span>
-
-            
-
-            
-
-            
-        </div>
-
-    
-</div>
-
-    
-
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-
-</div>
-
-        
     
 
     

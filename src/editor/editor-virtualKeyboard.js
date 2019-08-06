@@ -1007,6 +1007,7 @@ function expandLayerMarkup(mf, layer) {
  * @param {object} mf
  * @param {string} theme
  * @result {} A DOM element
+ * @private
  */
 function make(mf, theme) {
     const svgIcons =
@@ -1078,14 +1079,8 @@ function make(mf, theme) {
         });
     }
 
-    ALT_KEYS = {};
-    ALT_KEYS = Object.assign({}, ALT_KEYS_BASE);
-    for (const key in ALT_KEYS) {
-        if (ALT_KEYS.hasOwnProperty(key)) {
-            ALT_KEYS[key] = ALT_KEYS[key].slice();
-        }
-    }
-
+    ALT_KEYS = {...ALT_KEYS_BASE};
+    Object.keys(ALT_KEYS).forEach(key => { ALT_KEYS[key] = ALT_KEYS[key].slice() });
 
 
     const upperAlpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';

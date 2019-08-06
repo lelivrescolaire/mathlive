@@ -13,8 +13,8 @@ import Color from '../core/color.js';
 
 
 const SPECIAL_OPERATORS = {
-    '\\pm': '&#x00b1;',
-    '\\times': '&#x00d7;',
+    '\\pm': '&PlusMinus;',
+    '\\times': '&times;',
     '\\colon': ':',
     '\\vert': '|',
     '\\Vert': '\u2225',
@@ -131,11 +131,11 @@ function scanIdentifier(stream, final, options) {
             stream.lastType === 'mtext' ||
             stream.lastType === 'fence') &&
             !/^<mo>(.*)<\/mo>$/.test(mathML)) {
-            mathML = '<mo>&#x2062;</mo>' + mathML;      // INVISIBLE TIMES
+            mathML = '<mo>&InvisibleTimes;</mo>' + mathML;
         }
 
         if (body.endsWith('>f</mi>') || body.endsWith('>g</mi>')) {
-            mathML += '<mo>&#x2061;</mo>';              // APPLY FUNCTION
+            mathML += '<mo> &ApplyFunction; </mo>';
             stream.lastType = 'applyfunction';
         } else {
             stream.lastType = /^<mo>(.*)<\/mo>$/.test(mathML) ? 'mo' : 'mi';
@@ -155,6 +155,7 @@ function scanIdentifier(stream, final, options) {
  * Superscripts can be encoded either as an attribute on the last atom
  * or as a standalone, empty, atom following the one to which it applies.
  * @param {object} stream
+ * @private
  */
 function isSuperscriptAtom(stream) {
     return stream.index < stream.atoms.length &&
@@ -338,7 +339,7 @@ function scanFence(stream, final, options) {
                 stream.lastType === 'mn' ||
                 stream.lastType === 'mfrac' ||
                 stream.lastType === 'fence') {
-                mathML = '<mo>&#x2062;</mo>' + mathML;      // INVISIBLE TIMES
+                mathML = '<mo>&InvisibleTimes;</mo>' + mathML;
             }
             stream.index = closeIndex + 1;
 
@@ -424,7 +425,7 @@ function scanOperator(stream, final, options) {
 
         if ((stream.lastType === 'mi' || stream.lastType === 'mn') &&
             !/^<mo>(.*)<\/mo>$/.test(mathML)) {
-            mathML = '<mo>&#x2062;</mo>' + mathML;      // INVISIBLE TIMES
+            mathML = '<mo>&InvisibleTimes;</mo>' + mathML;
         }
         stream.index += 1;
     }
@@ -532,6 +533,7 @@ function toString(atoms) {
  * Return a MathML fragment representation of a single atom
  *
  * @return {string}
+ * @private
  */
 MathAtom.MathAtom.prototype.toMathML = function(options) {
     const SPECIAL_IDENTIFIERS = {
@@ -742,7 +744,7 @@ MathAtom.MathAtom.prototype.toMathML = function(options) {
             }
             break;
 
-        case 'mord':
+        case 'mord': {
             result = SPECIAL_IDENTIFIERS[command] || command || (typeof this.body === 'string' ? this.body : '');
             m = command ? command.match(/[{]?\\char"([0-9abcdefABCDEF]*)[}]?/) : null;
             if (m) {
@@ -760,9 +762,10 @@ MathAtom.MathAtom.prototype.toMathML = function(options) {
                     result = this.body;
                 }
             }
-            result = '<mi' + variant + makeID(this.id, options) + '>' + xmlEscape(result) + '</mi>';
+            const tag = /\d/.test(result) ? 'mn' : 'mi';
+            result = '<' + tag + variant + makeID(this.id, options) + '>' + xmlEscape(result) + '</' + tag + '>';
             break;
-
+        }
         case 'mbin':
         case 'mrel':
         case 'textord':
@@ -820,7 +823,7 @@ MathAtom.MathAtom.prototype.toMathML = function(options) {
         case 'enclose':
             result = '<menclose notation="';
             for (const notation in this.notation) {
-                if (this.notation.hasOwnProperty(notation) &&
+                if (Object.prototype.hasOwnProperty.call(this.notation, notation) &&
                     this.notation[notation]) {
                     result += sep + notation;
                     sep = ' ';

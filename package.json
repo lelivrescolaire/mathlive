@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/arnog/mathlive.git"
+        "url": "https://github.com/lelivrescolaire/mathlive.git"
     },
     "keywords": [
         "math",
@@ -23,7 +23,8 @@
         "mathquill"
     ],
     "files": [
-        "/dist"
+        "/dist",
+        "/src"
     ],
     "main": "./dist/mathlive.js",
     "types": "./dist/mathlive.d.ts",
@@ -89,15 +90,6 @@
         "maintained node versions",
         "not dead"
     ],
-    "author": "Arno Gourdol <arno@arno.org>",
-    "contributors": [
-        "Louis Larpin (lilfaf.github.io)",
-        "Neil Soiffer (https://github.com/NSoiffer)",
-        "Jason Boxman (https://github.com/jboxman)",
-        "Synergy Codes (https://www.synergycodes.com/)",
-        "Rafał Piekarski (https://github.com/rpdiss)"
-    ],
-    "bugs": "https://github.com/arnog/mathlive/issues/",
     "devDependencies": {
         "@babel/cli": "^7.8.3",
         "@babel/core": "^7.8.3",

@@ -1,16 +1,22 @@
-
 /**
  *
- * This modules exports the MathLive entry points.
+ * Use MathLive to render and edit mathematical formulas in your browser.
+ *
+ * This module exports {@link #functions%3Amathlive some functions} and the {@link #class%3AMathField `MathField`} class.
+ *
+ * See {@tutorial USAGE_GUIDE the Usage Guide} for more details on how to get
+ * started.
+ *
+ * @example
+ * // To invoke the functions in this module, import the `mathlive` module.
+ *
+ * import mathlive from 'dist/mathlive.mjs';
+ *
+ * console.log(mathlive.latexToMarkup('e^{i\\pi}+1=0'));
  *
  * @module mathlive
- * @example
- * // To invoke the functions in this module, import the MathLive module. 
- * 
- * import MathLive from 'dist/mathlive.mjs';
- * 
- * const markup = MathLive.latexToMarkup('e^{i\\pi}+1=0');
- * 
+ * @packageDocumentation MathLive API Reference
+ *
  */
 
 import Lexer from './core/lexer.js';
@@ -20,31 +26,38 @@ import Span from './core/span.js';
 import Definitions from './core/definitions.js';
 import MathField from './editor/editor-mathfield.js';
 import AutoRender from './addons/auto-render.js';
+import mathJson from './addons/mathJson.js';
 
 /**
- * Convert a LaTeX string to a string of HTML markup.
+ * Converts a LaTeX string to a string of HTML markup.
  *
  * @param {string} text A string of valid LaTeX. It does not have to start
  * with a mode token such as `$$` or `\(`.
  *
- * @param {string} mathstyle If `'displaystyle'` the "display" mode of TeX
+ * @param {"displaystyle" | "textstyle"} mathstyle If `'displaystyle'` the "display" mode of TeX
  * is used to typeset the formula, which is most appropriate for formulas that are
- * displayed in a standalone block. If `'textstyle'` is used, the "text" mode
+ * displayed in a standalone block.
+ *
+ * If `'textstyle'` is used, the "text" mode
  * of TeX is used, which is most appropriate when displaying math "inline"
  * with other text (on the same line).
  *
- * @param {string} [format='html'] For debugging purposes, this function
+ * @param {"mathlist" | "span" | "html"} [format='html'] For debugging purposes, this function
  * can also return a text representation of internal data structures
- * used to construct the markup. Valid values include `'mathlist'` and `'span'`
+ * used to construct the markup.
  *
  * @return {string}
+ * @category Converting
  * @function module:mathlive#latexToMarkup
  */
 function toMarkup(text, mathstyle, format, macros) {
     mathstyle = mathstyle || 'displaystyle';
 
-    console.assert(/displaystyle|textstyle|scriptstyle|scriptscriptstyle/.test(mathstyle),
-        "Invalid style:", mathstyle);
+    console.assert(
+        /displaystyle|textstyle|scriptstyle|scriptscriptstyle/.test(mathstyle),
+        'Invalid style:',
+        mathstyle
+    );
 
     //
     // 1. Tokenize the text
@@ -61,14 +74,11 @@ function toMarkup(text, mathstyle, format, macros) {
 
     if (format === 'mathlist') return mathlist;
 
-
-
     //
     // 3. Transform the math atoms into elementary spans
     //    for example from genfrac to vlist.
     //
-    let spans = MathAtom.decompose({mathstyle: mathstyle}, mathlist);
-
+    let spans = MathAtom.decompose({ mathstyle: mathstyle }, mathlist);
 
     //
     // 4. Simplify by coalescing adjacent nodes
@@ -84,7 +94,7 @@ function toMarkup(text, mathstyle, format, macros) {
     //
     const base = Span.makeSpan(spans, 'ML__base');
 
-    const topStrut = Span.makeSpan('', 'ML__strut')
+    const topStrut = Span.makeSpan('', 'ML__strut');
     topStrut.setStyle('height', base.height, 'em');
     const struts = [topStrut];
     if (base.depth !== 0) {
@@ -96,7 +106,6 @@ function toMarkup(text, mathstyle, format, macros) {
     struts.push(base);
     const wrapper = Span.makeSpan(struts, 'ML__mathlive');
 
-
     //
     // 6. Generate markup
     //
@@ -104,23 +113,21 @@ function toMarkup(text, mathstyle, format, macros) {
     return wrapper.toMarkup();
 }
 
-
-
 /**
- * Convert a DOM element into an editable math field.
- * 
- * After the DOM element has been created, the value `element.mathfield` will 
- * return a reference to the mathfield object. This value is also returned 
+ * Convert a DOM element into an editable mathfield.
+ *
+ * After the DOM element has been created, the value `element.mathfield` will
+ * return a reference to the mathfield object. This value is also returned
  * by `makeMathField`
- * 
- * @param {HTMLElement|string} element A DOM element, for example as obtained 
+ *
+ * @param {HTMLElement|string} element A DOM element, for example as obtained
  * by `document.getElementById()`, or the ID of a DOM element as a string.
- * 
+ *
  * @param {MathFieldConfig} [config={}] See {@tutorial CONFIG} for details.
  *
  *
  * @return {MathField}
- * 
+ *
  * Given the HTML markup:
  * ```html
  * <span id='equation'>$f(x)=sin(x)$</span>
@@ -130,7 +137,7 @@ function toMarkup(text, mathstyle, format, macros) {
  * import MathLive from 'dist/mathlive.mjs';
  * MathLive.makeMathField('equation');
  * ```
- * 
+ *
  * @function module:mathlive#makeMathField
  */
 function makeMathField(element, config) {
@@ -144,14 +151,16 @@ function makeMathField(element, config) {
 }
 
 /**
- * Convert a LaTeX string to a string of MathML markup.
+ * Converts a LaTeX string to a string of MathML markup.
  *
  * @param {string} latex A string of valid LaTeX. It does not have to start
  * with a mode token such as a `$$` or `\(`.
  * @param {object} options
- * @param {boolean} [options.generateID=false] - If true, add an `extid` attribute
- * to the MathML nodes with a value matching the `atomID`.
+ * @param {boolean} [options.generateID=false] - If true, add an `"extid"` attribute
+ * to the MathML nodes with a value matching the `atomID`. This can be used
+ * to map items on the screen with their MathML representation or vice-versa.
  * @return {string}
+ * @category Converting
  * @function module:mathlive#latexToMathML
  */
 function toMathML(latex, options) {
@@ -163,21 +172,28 @@ function toMathML(latex, options) {
     options.macros = options.macros || {};
     Object.assign(options.macros, Definitions.MACROS);
 
-    const mathlist = ParserModule.parseTokens(Lexer.tokenize(latex),
-        'math', null, options.macros);
+    const mathlist = ParserModule.parseTokens(
+        Lexer.tokenize(latex),
+        'math',
+        null,
+        options.macros
+    );
 
     return MathAtom.toMathML(mathlist, options);
 }
 
 /**
- * Convert a LaTeX string to an Abstract Syntax Tree
+ * Converts a LaTeX string to an Abstract Syntax Tree (MathJSON)
  *
- * **See:** {@tutorial MASTON}
+ * **See:** {@tutorial MATHJSON}
  *
  * @param {string} latex A string of valid LaTeX. It does not have to start
  * with a mode token such as a `$$` or `\(`.
+ * @param {Object.<string, any>} options
+ * @param {object} [options.macros] A dictionary of LaTeX macros
  *
- * @return {object} The Abstract Syntax Tree as a JavaScript object.
+ * @return {object} The Abstract Syntax Tree as an object literal using the MathJSON format.
+ * @category Converting
  * @function module:mathlive#latexToAST
  */
 function latexToAST(latex, options) {
@@ -189,64 +205,104 @@ function latexToAST(latex, options) {
     options.macros = options.macros || {};
     Object.assign(options.macros, Definitions.MACROS);
 
-    const mathlist = ParserModule.parseTokens(Lexer.tokenize(latex),
-        'math', null, options.macros);
+    const mathlist = ParserModule.parseTokens(
+        Lexer.tokenize(latex),
+        'math',
+        null,
+        options.macros
+    );
 
     return MathAtom.toAST(mathlist, options);
 }
 
-
+/**
+ * Converts an Abstract Syntax Tree (MathJSON) to a LaTeX string.
+ *
+ * **See:** {@tutorial MATHJSON}
+ *
+ * @param {object} ast - The Abstract Syntax Tree as an object literal (MathJSON).
+ * @param {Object.<string, any>} options
+ * @param {number} [options.precision=14] The number of digits used in the
+ * representation of numbers. **Default** = 14.
+ * @param {string} [options.decimalMarker='.'] The character used as the decimal
+ * marker. **Default** = `"."`.
+ * @param {string} [options.groupSeparator='\\, '] The character used to separate group of numbers, typically thousands. **Default** = `"\\, "`
+ * @param {string} [options.product='\\cdot '] The character used to indicate product. Other option would be `"\\times "`. **Default** = `"\\cdot "`
+ * @param {string} [options.exponentProduct='\\cdot '] The character used before an
+ * exponent indicator. **Default** = `"\\cdot "`
+ * @param {string} [options.exponentMarker=''] The character used to indicate an
+ * exponent. **Default** = `""`
+ * @param {"auto" | "engineering" | "on"} [options.scientificNotation='auto'] The format used for numbers
+ * using the scientific notation. **Default** = `"auto"`
+ * @param {string} [options.beginRepeatingDigits='\\overline{'] The string
+ * used at the begining of repeating digits. **Default** = `"\\overline{"`
+ * @param {string} [options.endRepeatingDigits='}'] The string
+ * used at the end of repeating digits. **Default** = `"}"`
+ *
+ * @return {string} The LaTeX representation of the Abstract Syntax Tree, if valid.
+ * @category Converting
+ * @function module:mathlive#astToLatex
+ */
+function astToLatex(ast, options) {
+    return mathJson.asLatex(ast, options);
+}
 
 /**
- * Convert a LaTeX string to a textual representation ready to be spoken
+ * Converts a LaTeX string to a textual representation ready to be spoken
  *
  * @param {string} latex A string of valid LaTeX. It does not have to start
  * with a mode token such as a `$$` or `\(`.
- * 
- * @param {Object.<string, any>} options -
- * 
- * @param {string} [options.textToSpeechRules='mathlive'] Specify which
- * set of text to speech rules to use. 
- * 
- * A value of `mathlive` indicates that
- * the simple rules built into MathLive should be used. A value of `sre`
- * indicates that the Speech Rule Engine from Volker Sorge should be used.
+ *
+ * @param {Object.<string, any>} options
+ *
+ * @param {"mathlive" | "sre"} [options.textToSpeechRules='mathlive'] The set of text to
+ * speech rules to use.
+ *
+ * A value of `"mathlive"` (the default) indicates that
+ * the simple rules built into MathLive should be used.
+ *
+ * A value of `"sre"` indicates that the Speech Rule Engine from Volker Sorge
+ * should be used.
  * Note that SRE is not included or loaded by MathLive and for this option to
  * work SRE should be loaded separately.
- * 
- * @param {string} [options.textToSpeechMarkup=''] The markup syntax to use 
- * for the output of conversion to spoken text. 
- * 
- * Possible values are `ssml` for 
- * the SSML markup or `mac` for the MacOS markup (e.g. `[[ltr]]`)
  *
- * @param {Object.<string, any>} [options.textToSpeechRulesOptions={}] A set of 
- * key/value pairs that can be used to configure the speech rule engine. 
- * 
- * Which options are available depends on the speech rule engine in use. There 
- * are no options available with MathLive's built-in engine. The options for 
+ * @param {string} [options.textToSpeechMarkup=''] The markup syntax to use
+ * for the output of conversion to spoken text.
+ *
+ * Possible values are `ssml` for
+ * the SSML markup or `mac` for the MacOS markup (e.g. `"[[ltr]]"`)
+ *
+ * @param {Object.<string, any>} [options.textToSpeechRulesOptions={}] A set of
+ * key/value pairs that can be used to configure the speech rule engine.
+ *
+ * Which options are available depends on the speech rule engine in use. There
+ * are no options available with MathLive's built-in engine. The options for
  * the SRE engine are documented [here]{@link:https://github.com/zorkow/speech-rule-engine}
  * @return {string} The spoken representation of the input LaTeX.
  * @example
  * console.log(MathLive.latexToSpeakableText('\\frac{1}{2}'));
  * // ➡︎'half'
+ * @category Converting
  * @function module:mathlive#latexToSpeakableText
  */
 function latexToSpeakableText(latex, options) {
     if (!MathAtom.toSpeakableText) {
         console.warn('The outputSpokenText module is not loaded.');
-        return "";
+        return '';
     }
     options = options || {};
     options.macros = options.macros || {};
     Object.assign(options.macros, Definitions.MACROS);
 
-    const mathlist = ParserModule.parseTokens(Lexer.tokenize(latex),
-        'math', null, options.macros);
+    const mathlist = ParserModule.parseTokens(
+        Lexer.tokenize(latex),
+        'math',
+        null,
+        options.macros
+    );
 
     return MathAtom.toSpeakableText(mathlist, options);
 }
-
 
 function removeHighlight(node) {
     node.classList.remove('highlight');
@@ -258,9 +314,11 @@ function removeHighlight(node) {
 }
 
 /**
- * Highlight the span corresponding to the specified atomID
- * This is used for TTS with synchronized highlighting (read aloud)
+ * Highlights the span corresponding to the specified atomID.
  *
+ * This is used for text-to-speech with synchronized highlighting (read aloud)
+ *
+ * @category Read Aloud
  * @param {string} atomID
  *
  */
@@ -299,9 +357,11 @@ function speak(text, config) {
         }
     } else if (config.speechEngine === 'amazon') {
         if (!window || !window.AWS) {
-            console.warn('AWS SDK not loaded. See https://www.npmjs.com/package/aws-sdk');
+            console.warn(
+                'AWS SDK not loaded. See https://www.npmjs.com/package/aws-sdk'
+            );
         } else {
-            const polly = new window.AWS.Polly({apiVersion: '2016-06-10'});
+            const polly = new window.AWS.Polly({ apiVersion: '2016-06-10' });
             const params = {
                 OutputFormat: 'mp3',
                 VoiceId: config.speechEngineVoice || 'Joanna',
@@ -312,11 +372,17 @@ function speak(text, config) {
             };
             polly.synthesizeSpeech(params, function(err, data) {
                 if (err) {
-                    console.warn('polly.synthesizeSpeech() error:', err, err.stack);
+                    console.warn(
+                        'polly.synthesizeSpeech() error:',
+                        err,
+                        err.stack
+                    );
                 } else {
                     if (data && data.AudioStream) {
                         const uInt8Array = new Uint8Array(data.AudioStream);
-                        const blob = new Blob([uInt8Array.buffer], {type: 'audio/mpeg'});
+                        const blob = new Blob([uInt8Array.buffer], {
+                            type: 'audio/mpeg',
+                        });
                         const url = URL.createObjectURL(blob);
 
                         const audioElement = new Audio(url);
@@ -330,35 +396,37 @@ function speak(text, config) {
             // Can call AWS.Request() on the result of synthesizeSpeech()
         }
     } else if (config.speechEngine === 'google') {
-        console.warn('The Google speech engine is not supported yet. Please come again.');
+        console.warn(
+            'The Google speech engine is not supported yet. Please come again.'
+        );
         // @todo: implement support for Google Text-to-Speech API,
         // using config.speechEngineToken, config.speechEngineVoice and
         // config.speechEngineAudioConfig
 
-// curl -H "Authorization: Bearer "$(gcloud auth application-default print-access-token) \
-//   -H "Content-Type: application/json; charset=utf-8" \
-//   --data "{
-//     'input':{
-//       'text':'Android is a mobile operating system developed by Google,
-//          based on the Linux kernel and designed primarily for
-//          touchscreen mobile devices such as smartphones and tablets.'
-//     },
-//     'voice':{
-//       'languageCode':'en-gb',
-//       'name':'en-GB-Standard-A',
-//       'ssmlGender':'FEMALE'
-//     },
-//     'audioConfig':{
-//       'audioEncoding':'MP3'
-//     }
-//   }" "https://texttospeech.googleapis.com/v1beta1/text:synthesize" > synthesize-text.txt
+        // curl -H "Authorization: Bearer "$(gcloud auth application-default print-access-token) \
+        //   -H "Content-Type: application/json; charset=utf-8" \
+        //   --data "{
+        //     'input':{
+        //       'text':'Android is a mobile operating system developed by Google,
+        //          based on the Linux kernel and designed primarily for
+        //          touchscreen mobile devices such as smartphones and tablets.'
+        //     },
+        //     'voice':{
+        //       'languageCode':'en-gb',
+        //       'name':'en-GB-Standard-A',
+        //       'ssmlGender':'FEMALE'
+        //     },
+        //     'audioConfig':{
+        //       'audioEncoding':'MP3'
+        //     }
+        //   }" "https://texttospeech.googleapis.com/v1beta1/text:synthesize" > synthesize-text.txt
     }
 }
 
 /**
- * "Read Aloud" is an asynchronous operation that reads the 
+ * "Read Aloud" is an asynchronous operation that reads the
  * reading with synchronized highlighting
- * 
+ *
  * @param {DOMElement} element - The DOM element to highlight
  * @param {string} text - The text to speak
  * @param {object} config
@@ -380,23 +448,26 @@ function readAloud(element, text, config) {
         return;
     }
     if (!window.AWS) {
-        console.warn('AWS SDK not loaded. See https://www.npmjs.com/package/aws-sdk');
+        console.warn(
+            'AWS SDK not loaded. See https://www.npmjs.com/package/aws-sdk'
+        );
         return;
     }
-    const polly = new window.AWS.Polly({apiVersion: '2016-06-10'});
+    const polly = new window.AWS.Polly({ apiVersion: '2016-06-10' });
 
     const params = {
         OutputFormat: 'json',
         VoiceId: config.speechEngineVoice || 'Joanna',
         Text: text,
         TextType: 'ssml',
-        SpeechMarkTypes: ['ssml']
+        SpeechMarkTypes: ['ssml'],
     };
 
     window.mathlive = window.mathlive || {};
     window.mathlive.readAloudElement = element;
 
-    const status = config.onReadAloudStatus || window.mathlive.onReadAloudStatus;
+    const status =
+        config.onReadAloudStatus || window.mathlive.onReadAloudStatus;
 
     // Request the mark points
     polly.synthesizeSpeech(params, function(err, data) {
@@ -404,8 +475,12 @@ function readAloud(element, text, config) {
             console.warn('polly.synthesizeSpeech() error:', err, err.stack);
         } else {
             if (data && data.AudioStream) {
-                const response = new TextDecoder('utf-8').decode(new Uint8Array(data.AudioStream));
-                window.mathlive.readAloudMarks = response.split('\n').map(x => x ? JSON.parse(x) : {});
+                const response = new TextDecoder('utf-8').decode(
+                    new Uint8Array(data.AudioStream)
+                );
+                window.mathlive.readAloudMarks = response
+                    .split('\n')
+                    .map(x => (x ? JSON.parse(x) : {}));
                 window.mathlive.readAloudTokens = [];
                 for (const mark of window.mathlive.readAloudMarks) {
                     if (mark.value) {
@@ -419,58 +494,103 @@ function readAloud(element, text, config) {
                 params.SpeechMarkTypes = [];
                 polly.synthesizeSpeech(params, function(err, data) {
                     if (err) {
-                        console.warn('polly.synthesizeSpeech(', text , ') error:', err, err.stack);
+                        console.warn(
+                            'polly.synthesizeSpeech(',
+                            text,
+                            ') error:',
+                            err,
+                            err.stack
+                        );
                     } else {
                         if (data && data.AudioStream) {
                             const uInt8Array = new Uint8Array(data.AudioStream);
-                            const blob = new Blob([uInt8Array.buffer], {type: 'audio/mpeg'});
+                            const blob = new Blob([uInt8Array.buffer], {
+                                type: 'audio/mpeg',
+                            });
                             const url = URL.createObjectURL(blob);
 
                             if (!window.mathlive.readAloudAudio) {
                                 window.mathlive.readAloudAudio = new Audio();
-                                window.mathlive.readAloudAudio.addEventListener('ended', () => {
-                                    if (status) status(window.mathlive.readAloudMathField, 'ended');
-                                    if (window.mathlive.readAloudMathField) {
-                                        window.mathlive.readAloudMathField._render();
-                                        window.mathlive.readAloudElement = null;
-                                        window.mathlive.readAloudMathField = null;
-                                        window.mathlive.readAloudTokens = [];
-                                        window.mathlive.readAloudMarks = [];
-                                        window.mathlive.readAloudCurrentMark = '';
-                                    } else {
-                                        removeHighlight(window.mathlive.readAloudElement);
-                                    }
-                                });
-                                window.mathlive.readAloudAudio.addEventListener('timeupdate', () => {
-                                    let value = '';
-                                    // The target, the atom we're looking for, is the one matching the current audio
-                                    // plus 100 ms. By anticipating it a little bit, it feels more natural, otherwise it
-                                    // feels like the highlighting is trailing the audio.
-                                    const target = window.mathlive.readAloudAudio.currentTime * 1000 + 100;
-
-                                    // Find the smallest element which is bigger than the target time
-                                    for (const mark of window.mathlive.readAloudMarks) {
-                                        if (mark.time < target) {
-                                            value = mark.value;
-                                        }
-                                    }
-                                    if (window.mathlive.readAloudCurrentMark !== value) {
-                                        window.mathlive.readAloudCurrentToken = value;
-                                        if (value && value === window.mathlive.readAloudFinalToken) {
-                                            window.mathlive.readAloudAudio.pause();
+                                window.mathlive.readAloudAudio.addEventListener(
+                                    'ended',
+                                    () => {
+                                        if (status)
+                                            status(
+                                                window.mathlive
+                                                    .readAloudMathField,
+                                                'ended'
+                                            );
+                                        if (
+                                            window.mathlive.readAloudMathField
+                                        ) {
+                                            window.mathlive.readAloudMathField._render();
+                                            window.mathlive.readAloudElement = null;
+                                            window.mathlive.readAloudMathField = null;
+                                            window.mathlive.readAloudTokens = [];
+                                            window.mathlive.readAloudMarks = [];
+                                            window.mathlive.readAloudCurrentMark =
+                                                '';
                                         } else {
-                                            window.mathlive.readAloudCurrentMark = value;
-                                            highlightAtomID(window.mathlive.readAloudElement, window.mathlive.readAloudCurrentMark);
+                                            removeHighlight(
+                                                window.mathlive.readAloudElement
+                                            );
                                         }
                                     }
-                                });
+                                );
+                                window.mathlive.readAloudAudio.addEventListener(
+                                    'timeupdate',
+                                    () => {
+                                        let value = '';
+                                        // The target, the atom we're looking for, is the one matching the current audio
+                                        // plus 100 ms. By anticipating it a little bit, it feels more natural, otherwise it
+                                        // feels like the highlighting is trailing the audio.
+                                        const target =
+                                            window.mathlive.readAloudAudio
+                                                .currentTime *
+                                                1000 +
+                                            100;
+
+                                        // Find the smallest element which is bigger than the target time
+                                        for (const mark of window.mathlive
+                                            .readAloudMarks) {
+                                            if (mark.time < target) {
+                                                value = mark.value;
+                                            }
+                                        }
+                                        if (
+                                            window.mathlive
+                                                .readAloudCurrentMark !== value
+                                        ) {
+                                            window.mathlive.readAloudCurrentToken = value;
+                                            if (
+                                                value &&
+                                                value ===
+                                                    window.mathlive
+                                                        .readAloudFinalToken
+                                            ) {
+                                                window.mathlive.readAloudAudio.pause();
+                                            } else {
+                                                window.mathlive.readAloudCurrentMark = value;
+                                                highlightAtomID(
+                                                    window.mathlive
+                                                        .readAloudElement,
+                                                    window.mathlive
+                                                        .readAloudCurrentMark
+                                                );
+                                            }
+                                        }
+                                    }
+                                );
                             } else {
                                 window.mathlive.readAloudAudio.pause();
                             }
 
                             window.mathlive.readAloudAudio.src = url;
                             if (status) {
-                                status(window.mathlive.readAloudMathField, 'playing');
+                                status(
+                                    window.mathlive.readAloudMathField,
+                                    'playing'
+                                );
                             }
                             window.mathlive.readAloudAudio.play();
                         } else {
@@ -486,17 +606,18 @@ function readAloud(element, text, config) {
 }
 
 /**
- * Return the status of a Read Aloud operation (reading with synchronized
- * highlighting). 
- * 
- * Possible values include:
- * - `ready`
- * - `playing`
- * - `paused`
- * - `unavailable`
- * 
+ * Returns the status of a Read Aloud operation (reading with synchronized
+ * highlighting).
+ *
+ * Possible values are:
+ * - `"ready"`
+ * - `"playing"`
+ * - `"paused"`
+ * - `"unavailable"`
+ *
  * **See** {@linkcode module:editor-mathfield#speak speak}
- * @return {string}
+ * @category Read Aloud
+ * @return {"ready" | "playing" | "paused" | "unavailable"}
  * @function module:mathlive#readAloudStatus
  */
 function readAloudStatus() {
@@ -511,9 +632,10 @@ function readAloudStatus() {
 }
 
 /**
- * If a Read Aloud operation is in progress, stop it.
- * 
+ * Pauses a read aloud operation if one is in progress.
+ *
  * **See** {@linkcode module:editor/mathfield#speak speak}
+ * @category Read Aloud
  * @function module:mathlive#pauseReadAloud
  */
 function pauseReadAloud() {
@@ -521,16 +643,20 @@ function pauseReadAloud() {
     window.mathlive = window.mathlive || {};
     if (window.mathlive.readAloudAudio) {
         if (window.mathlive.onReadAloudStatus) {
-            window.mathlive.onReadAloudStatus(window.mathlive.readAloudMathField, 'paused');
+            window.mathlive.onReadAloudStatus(
+                window.mathlive.readAloudMathField,
+                'paused'
+            );
         }
         window.mathlive.readAloudAudio.pause();
     }
 }
 
 /**
- * If a Read Aloud operation is paused, resume it
- * 
+ * Resumes a read aloud operation if one was paused.
+ *
  * **See** {@linkcode module:editor-mathfield#speak speak}
+ * @category Read Aloud
  * @function module:mathlive#resumeReadAloud
  */
 function resumeReadAloud() {
@@ -538,7 +664,10 @@ function resumeReadAloud() {
     window.mathlive = window.mathlive || {};
     if (window.mathlive.readAloudAudio) {
         if (window.mathlive.onReadAloudStatus) {
-            window.mathlive.onReadAloudStatus(window.mathlive.readAloudMathField, 'playing');
+            window.mathlive.onReadAloudStatus(
+                window.mathlive.readAloudMathField,
+                'playing'
+            );
         }
         window.mathlive.readAloudAudio.play();
     }
@@ -546,11 +675,12 @@ function resumeReadAloud() {
 
 /**
  * If a Read Aloud operation is in progress, read from a specified token
- * 
+ *
  * **See** {@linkcode module:editor-mathfield#speak speak}
  *
- * @param {string} token
- * @param {number} [count]
+ * @param {string} [token]
+ * @param {number} [count] The number of tokens to read.
+ * @category Read Aloud
  * @function module:mathlive#playReadAloud
  */
 function playReadAloud(token, count) {
@@ -560,7 +690,8 @@ function playReadAloud(token, count) {
         let timeIndex = 0;
         window.mathlive.readAloudFinalToken = null;
         if (token) {
-            window.mathlive.readAloudMarks = window.mathlive.readAloudMarks || [];
+            window.mathlive.readAloudMarks =
+                window.mathlive.readAloudMarks || [];
             for (const mark of window.mathlive.readAloudMarks) {
                 if (mark.value === token) {
                     timeIndex = mark.time / 1000;
@@ -576,19 +707,21 @@ function playReadAloud(token, count) {
         }
         window.mathlive.readAloudAudio.currentTime = timeIndex;
         if (window.mathlive.onReadAloudStatus) {
-            window.mathlive.onReadAloudStatus(window.mathlive.readAloudMathField, 'playing');
+            window.mathlive.onReadAloudStatus(
+                window.mathlive.readAloudMathField,
+                'playing'
+            );
         }
         window.mathlive.readAloudAudio.play();
     }
 }
 
-
 /**
  * Transform all the elements in the document body that contain LaTeX code
  * into typeset math.
- * 
- * **Note:** This is a very expensive call, as it needs to parse the entire 
- * DOM tree to determine which elements need to be processed. In most cases 
+ *
+ * **Note:** This is a very expensive call, as it needs to parse the entire
+ * DOM tree to determine which elements need to be processed. In most cases
  * this should only be called once per document, once the DOM has been loaded.
  * To render a specific element, use {@linkcode module:mathlive#renderMathInElement renderMathInElement()}
  *
@@ -598,10 +731,10 @@ function playReadAloud(token, count) {
  * for details
  * @example
  * import MathLive from 'dist/mathlive.mjs';
- * document.addEventListener("load", () => { 
+ * document.addEventListener("load", () => {
  *     MathLive.renderMathInDocument();
  * });
- * 
+ *
  */
 function renderMathInDocument(options) {
     renderMathInElement(document.body, options);
@@ -629,19 +762,19 @@ function getElement(element) {
  * @param {object} [options={}]
  *
  * @param {string} [options.namespace=''] - Namespace that is added to `data-`
- * attributes to avoid collisions with other libraries. 
- * 
+ * attributes to avoid collisions with other libraries.
+ *
  * It is empty by default.
- * 
+ *
  * The namespace should be a string of lowercase letters.
- * 
+ *
  * @param {object[]} [options.macros={}] - Custom LaTeX macros
- * 
- * @param {string[]} [options.skipTags=['noscript', 'style', 'textarea', 'pre', 'code', 'annotation', 'annotation-xml'] ] 
+ *
+ * @param {string[]} [options.skipTags=['noscript', 'style', 'textarea', 'pre', 'code', 'annotation', 'annotation-xml'] ]
  * an array of tag names whose content will
  *  not be scanned for delimiters (unless their class matches the `processClass`
  * pattern below.
- * 
+ *
  * @param {string} [options.ignoreClass='tex2jax_ignore'] a string used as a
  * regular expression of class names of elements whose content will not be
  * scanned for delimiters
@@ -650,20 +783,20 @@ function getElement(element) {
  * regular expression of class names of elements whose content **will** be
  * scanned for delimiters,  even if their tag name or parent class name would
  * have prevented them from doing so.
- * 
- * @param {string} [options.processScriptType="math/tex"] `<script>` tags of the 
+ *
+ * @param {string} [options.processScriptType="math/tex"] `<script>` tags of the
  * indicated type will be processed while others will be ignored.
 
- * 
- * @param {string} [options.renderAccessibleContent='mathml'] The format(s) in 
+ *
+ * @param {string} [options.renderAccessibleContent='mathml'] The format(s) in
  * which to render the math for screen readers:
  * - `'mathml'` MathML
  * - `'speakable-text'` Spoken representation
- * 
+ *
  * You can pass an empty string to turn off the rendering of accessible content.
- * 
+ *
  * You can pass multiple values separated by spaces, e.g `'mathml speakable-text'`
- * 
+ *
  * @param {boolean} [options.preserveOriginalContent=true] if true, store the
  * original textual content of the element in a `data-original-content`
  * attribute. This value can be accessed for example to restore the element to
@@ -673,26 +806,26 @@ function getElement(element) {
  * ```
  * @param {boolean} [options.readAloud=false] if true, generate markup that can
  * be read aloud later using {@linkcode module:editor-mathfield#speak speak}
- * 
+ *
  * @param {boolean} [options.TeX.processEnvironments=true] if false, math expression
  * that start with `\begin{` will not automatically be rendered.
- * 
+ *
  * @param {string[][]} [options.TeX.delimiters.inline=[['\\(','\\)']] ] arrays
  * of delimiter pairs that will trigger a render of the content in 'textstyle'
  *
  * @param {string[][]} [options.TeX.delimiters.display=[['$$', '$$'], ['\\[', '\\]']] ] arrays
  * of delimiter pairs that will trigger a render of the content in
  * 'displaystyle'.
- * 
+ *
  * @param {function} [renderToMarkup] a function that will convert any LaTeX found to
  * HTML markup. This is only useful to override the default MathLive renderer
- * 
+ *
  * @param {function} [renderToMathML] a function that will convert any LaTeX found to
  * MathML markup.
- * 
+ *
  * @param {function} [renderToSpeakableText] a function that will convert any LaTeX found to
  * speakable text markup.
- * 
+ *
  * @function module:mathlive#renderMathInElement
  */
 
@@ -704,20 +837,21 @@ function renderMathInElement(element, options) {
     options = options || {};
     options.renderToMarkup = options.renderToMarkup || toMarkup;
     options.renderToMathML = options.renderToMathML || toMathML;
-    options.renderToSpeakableText = options.renderToSpeakableText || latexToSpeakableText;
+    options.renderToSpeakableText =
+        options.renderToSpeakableText || latexToSpeakableText;
     options.macros = options.macros || Definitions.MACROS;
     AutoRender.renderMathInElement(getElement(element), options);
 }
 
-
-
 function validateNamespace(options) {
     if (options.namespace) {
         if (!/^[a-z]+[-]?$/.test(options.namespace)) {
-            throw Error('options.namespace must be a string of lowercase characters only');
+            throw Error(
+                'options.namespace must be a string of lowercase characters only'
+            );
         }
         if (!/-$/.test(options.namespace)) {
-           options.namespace += '-';
+            options.namespace += '-';
         }
     }
 }
@@ -742,18 +876,17 @@ function revertToOriginalContent(element, options) {
     } else {
         options = options || {};
         validateNamespace(options);
-        element.innerHTML = element.getAttribute('data-' +
-            (options.namespace || '') + 'original-content');
+        element.innerHTML = element.getAttribute(
+            'data-' + (options.namespace || '') + 'original-content'
+        );
     }
 }
-
-
 
 /**
  * After calling {@linkcode module:mathlive#renderMathInElement renderMathInElement}
  * or {@linkcode module:mathlive#makeMathField makeMathField} the original content
- * can be retrived by calling this function.
- * 
+ * can be retrieved by calling this function.
+ *
  * Given the following markup:
  * ```html
  * <span id='equation'>$$f(x)=sin(x)$$</span>
@@ -767,12 +900,12 @@ function revertToOriginalContent(element, options) {
  * ```
  * $$f(x)=sin(x)$$
  * ```
- * @param {string | HTMLElement | MathField} element - A DOM element ID, a DOM 
+ * @param {string | HTMLElement | MathField} element - A DOM element ID, a DOM
  * element or a MathField.
  * @param {object} [options={}]
  * @param {string} [options.namespace=""] The namespace used for the `data-`
- * attributes. 
- * If you used a namespace with `renderMathInElement`, you must
+ * attributes.
+ * If you used a namespace with `renderMathInElement()`, you must
  * use the same namespace here.
  * @return {string} the original content of the element.
  * @function module:mathlive#getOriginalContent
@@ -788,8 +921,9 @@ function getOriginalContent(element, options) {
     }
     options = options || {};
     validateNamespace(options);
-    return element.getAttribute('data-' +
-        (options.namespace || '') + 'original-content');
+    return element.getAttribute(
+        'data-' + (options.namespace || '') + 'original-content'
+    );
 }
 
 const MathLive = {
@@ -797,6 +931,7 @@ const MathLive = {
     latexToMathML: toMathML,
     latexToSpeakableText,
     latexToAST,
+    astToLatex,
     makeMathField,
     renderMathInDocument,
     renderMathInElement,
@@ -806,10 +941,7 @@ const MathLive = {
     readAloudStatus,
     pauseReadAloud,
     resumeReadAloud,
-    playReadAloud
+    playReadAloud,
 };
 
 export default MathLive;
-
-
-

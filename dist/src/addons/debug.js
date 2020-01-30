@@ -1,8 +1,8 @@
 /**
  * This module contains utilities to debug mathlive internal data structures.
- * 
+ *
  * It is also used by the automated test suite.
- * 
+ *
  * @module addons/debug
  * @private
  */
@@ -16,19 +16,23 @@ export function latexToAsciiMath(latex, mode) {
     mode = mode || 'math';
 
     const mathlist = ParserModule.parseTokens(
-        Lexer.tokenize(latex), mode, null, null);
+        Lexer.tokenize(latex),
+        mode,
+        null,
+        null
+    );
 
     return toASCIIMath(mathlist);
 }
 
 export function asciiMathToLatex(ascii) {
-    return parseMathString(ascii, {format: 'ASCIIMath'});
+    return parseMathString(ascii, { format: 'ASCIIMath' });
 }
 
 /**
- * 
- * @param {object[]} spans 
- * @param {string|number|number[]} symbol specify which span to consider. 
+ *
+ * @param {object[]} spans
+ * @param {string|number|number[]} symbol specify which span to consider.
  * If a string, a span whose body match the string
  * If a number, the nth span in the list
  * If an array, each element in the array indicate the nth child to traverse
@@ -39,8 +43,8 @@ function getSymbol(spans, symbol) {
     let childSymbol = null;
 
     if (Array.isArray(symbol)) {
-        childSymbol = symbol.slice();  // Clone the array
-        symbol = childSymbol.shift();   // Get the first element and remove it from the array
+        childSymbol = symbol.slice(); // Clone the array
+        symbol = childSymbol.shift(); // Get the first element and remove it from the array
     }
 
     let result = null;
@@ -75,11 +79,11 @@ function getProp(spans, symbol, prop) {
 
 /**
  * Return the type ('mbin', etc...) of a span
- * @param {Span[]} spans 
- * @param {string} symbol 
+ * @param {Span[]} spans
+ * @param {string} symbol
  * @return {string}
  * @private
-*/
+ */
 function getType(spans, symbol) {
     const s = getSymbol(spans, symbol);
     if (s) return s.type;
@@ -88,17 +92,16 @@ function getType(spans, symbol) {
 
 /**
  * Return the tag ('span', 'var', etc...) of a span
- * @param {Span[]} spans 
- * @param {string} symbol 
+ * @param {Span[]} spans
+ * @param {string} symbol
  * @return {string}
  * @private
-*/
+ */
 function getTag(spans, symbol) {
     const s = getSymbol(spans, symbol);
     if (s) return s.tag;
     return null;
 }
-
 
 function getStyle(spans, symbol, prop) {
     const s = getSymbol(spans, symbol);
@@ -111,7 +114,6 @@ function getClasses(spans, symbol) {
     if (s) return s.classes || '';
     return null;
 }
-
 
 function hasClass(spans, symbol, cls) {
     let classes = getClasses(spans, symbol);
@@ -162,7 +164,8 @@ function spanToString(span, indent) {
             }
         }
         if (span.children && span.children.length > 0) {
-            result += indent + 'children:' + spanToString(span.children, indent);
+            result +=
+                indent + 'children:' + spanToString(span.children, indent);
         }
         result += indent + '}';
     }
@@ -178,13 +181,15 @@ function mathlistPropToString(mathlist, prop, indent) {
     } else if (typeof value === 'number') {
         return indent + prop + ':' + value + ',\n';
     } else if (Array.isArray(value)) {
-        return indent + prop + ':' + mathlistToString(value, indent + '\t') + ',\n';
+        return (
+            indent + prop + ':' + mathlistToString(value, indent + '\t') + ',\n'
+        );
     }
     return '';
 }
 
 function mathlistToString(mathlist, indent) {
-    if (!mathlist) return ''; 
+    if (!mathlist) return '';
 
     indent = indent || '';
     let result = '';
@@ -260,7 +265,8 @@ function spanToMarkup(span, indent) {
                 result += '<span class="value">' + span.body + '</span>';
             }
             if (span.classes && span.classes.length > 0) {
-                result += '&nbsp;<span class="classes">' + span.classes + '</span>';
+                result +=
+                    '&nbsp;<span class="classes">' + span.classes + '</span>';
             }
             if (span.isTight) {
                 result += '&nbsp;<span class="stylevalue"> tight </span>';
@@ -272,8 +278,12 @@ function spanToMarkup(span, indent) {
             if (span.style) {
                 for (const s in span.style) {
                     if (Object.prototype.hasOwnProperty.call(span.style, s)) {
-                        result += '&nbsp;<span class="styleprop">' + s + ':</span>';
-                        result += '<span class="stylevalue"> ' + span.style[s] + '</span>;&nbsp;';
+                        result +=
+                            '&nbsp;<span class="styleprop">' + s + ':</span>';
+                        result +=
+                            '<span class="stylevalue"> ' +
+                            span.style[s] +
+                            '</span>;&nbsp;';
                     }
                 }
             }
@@ -282,10 +292,17 @@ function spanToMarkup(span, indent) {
             }
         }
     } else if (span) {
-        result += '<br>' + indent + 'table ' + span.array[0].length + '&times;' + span.array.length;
+        result +=
+            '<br>' +
+            indent +
+            'table ' +
+            span.array[0].length +
+            '&times;' +
+            span.array.length;
         for (let i = 0; i < span.array.length; i++) {
             for (let j = 0; j < span.array[i].length; j++) {
-                result += '<br>' + indent + '[' + (i + 1) + ', ' + (j + 1) + '] ';
+                result +=
+                    '<br>' + indent + '[' + (i + 1) + ', ' + (j + 1) + '] ';
                 result += spanToMarkup(span.array[i][j], '');
             }
         }
@@ -296,8 +313,11 @@ function spanToMarkup(span, indent) {
 function mathListColorToMarkup(mathlist, propname) {
     let result = '';
     if (mathlist[propname]) {
-        result += '<span class="styleprop">' + propname + '=</span>'; 
-        result += '<span style="font-size:2em;vertical-align:middle;color:' + mathlist[propname] + '">&#9632;</span>';    
+        result += '<span class="styleprop">' + propname + '=</span>';
+        result +=
+            '<span style="font-size:2em;vertical-align:middle;color:' +
+            mathlist[propname] +
+            '">&#9632;</span>';
         result += '<span class="stylevalue">';
         result += mathlist[propname];
         result += '</span>';
@@ -308,16 +328,16 @@ function mathListColorToMarkup(mathlist, propname) {
 function mathListPropToMarkup(mathlist, propname) {
     let result = '';
     if (mathlist[propname]) {
-        result += '<span class="styleprop">' + propname + '=</span>'; 
+        result += '<span class="styleprop">' + propname + '=</span>';
         result += '<span class="stylevalue">';
-        result += mathlist[propname]
+        result += mathlist[propname];
         result += '</span>" ';
     }
     return result;
 }
 
 function mathlistToMarkup(mathlist, indent) {
-    if (!mathlist) return ''; 
+    if (!mathlist) return '';
 
     indent = indent || '';
     let result = '';
@@ -331,16 +351,24 @@ function mathlistToMarkup(mathlist, indent) {
             result += '<span class="type';
             result += mathlist.isSelected ? ' selected' : '';
             result += mathlist.caret ? ' caret' : '';
-            result += '">' + mathlist.type + 
-                (mathlist.caret ? ' caret ' : '') + '</span>';
+            result +=
+                '">' +
+                mathlist.type +
+                (mathlist.caret ? ' caret ' : '') +
+                '</span>';
         }
         if (typeof mathlist.body === 'string' && mathlist.body.length > 0) {
             result += '&nbsp;<span class="value">';
             result += mathlist.body;
-            if (mathlist.body.charCodeAt(0) < 32 
-                || mathlist.body.charCodeAt(0) > 127) {
-                result += '&nbsp;U+' + ('000000' + 
-                    mathlist.body.charCodeAt(0).toString(16)).substr(-6);
+            if (
+                mathlist.body.charCodeAt(0) < 32 ||
+                mathlist.body.charCodeAt(0) > 127
+            ) {
+                result +=
+                    '&nbsp;U+' +
+                    (
+                        '000000' + mathlist.body.charCodeAt(0).toString(16)
+                    ).substr(-6);
             }
             result += '</span>&nbsp;';
         }
@@ -379,7 +407,7 @@ function mathlistToMarkup(mathlist, indent) {
 
         // Type 'line'
         result += mathListPropToMarkup(mathlist, 'position');
-        
+
         // Type 'overunder'
         result += mathlistToMarkup(mathlist.overscript, indent + '↑');
         result += mathlistToMarkup(mathlist.underscript, indent + '↓');
@@ -392,9 +420,18 @@ function mathlistToMarkup(mathlist, indent) {
 
         if (mathlist.array) {
             for (let i = 0; i < mathlist.array.length; i++) {
-                result += '<br>' + indent + '\u2317 row ' + (i + 1) + '/' + mathlist.array.length;
+                result +=
+                    '<br>' +
+                    indent +
+                    '\u2317 row ' +
+                    (i + 1) +
+                    '/' +
+                    mathlist.array.length;
                 for (let j = 0; j < mathlist.array[i].length; j++) {
-                    result += mathlistToMarkup(mathlist.array[i][j], indent + '\u2317\u232A');
+                    result += mathlistToMarkup(
+                        mathlist.array[i][j],
+                        indent + '\u2317\u232A'
+                    );
                 }
             }
         }
@@ -402,19 +439,14 @@ function mathlistToMarkup(mathlist, indent) {
     return result;
 }
 
-
-
-
-
-
 // Export the public interface for this module
-export default { 
+export default {
     mathlistToMarkup,
     spanToMarkup,
 
     mathlistToString,
     spanToString,
-    
+
     hasClass,
     getClasses,
     getProp,
@@ -424,7 +456,4 @@ export default {
 
     latexToAsciiMath,
     asciiMathToLatex,
-}
-
-
-
+};

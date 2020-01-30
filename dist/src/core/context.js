@@ -1,4 +1,3 @@
-
 import Mathstyle from './mathstyle.js';
 
 /**
@@ -19,11 +18,11 @@ import Mathstyle from './mathstyle.js';
  * `'script'` or `'scriptscript'`
  * @property {number} opacity
  * @property {number} size
- * @property {boolean|object} generateID - If true, unique IDs should be 
- * generated for each span so they can be mapped back to an atom. 
- * Can also be an object with a `seed` field to generate a specific range of 
- * IDs. Optionally, if a `groupNumbers` property is set to true, an additional 
- * span will enclose strings of digits. This is used by read aloud to properly 
+ * @property {boolean|object} generateID - If true, unique IDs should be
+ * generated for each span so they can be mapped back to an atom.
+ * Can also be an object with a `seed` field to generate a specific range of
+ * IDs. Optionally, if a `groupNumbers` property is set to true, an additional
+ * span will enclose strings of digits. This is used by read aloud to properly
  * pronounce (and highlight) numbers in expressions.
  * @property {string} parentMathstyle
  * @property {number} parentSize
@@ -38,8 +37,10 @@ class Context {
         this.macros = from.macros || {};
         this.generateID = from.generateID ? from.generateID : false;
 
-        this.mathstyle = Mathstyle.toMathstyle(from.mathstyle || 'displaystyle');
-        this.size = from.size || 'size5';   // medium size
+        this.mathstyle = Mathstyle.toMathstyle(
+            from.mathstyle || 'displaystyle'
+        );
+        this.size = from.size || 'size5'; // medium size
 
         this.parentMathstyle = from.parentMathstyle || this.mathstyle;
         this.parentSize = from.parentSize || this.size;
@@ -61,7 +62,7 @@ class Context {
         result.macros = this.macros;
         if (override) {
             // `'auto'` (or undefined) to indicate that the mathstyle should in
-            // fact not be changed. This is used when specifying the mathstyle 
+            // fact not be changed. This is used when specifying the mathstyle
             // for some environments.
             if (override.mathstyle === 'auto' || !override.mathstyle) {
                 delete override.mathstyle;
@@ -73,7 +74,6 @@ class Context {
         }
         return result;
     }
-
 
     /**
      * Change the mathstyle of this context
@@ -90,16 +90,16 @@ class Context {
         }
     }
     cramp() {
-        return this.clone({'mathstyle': this.mathstyle.cramp()});
+        return this.clone({ mathstyle: this.mathstyle.cramp() });
     }
     sup() {
-        return this.clone({'mathstyle': this.mathstyle.sup()});
+        return this.clone({ mathstyle: this.mathstyle.sup() });
     }
     sub() {
-        return this.clone({'mathstyle': this.mathstyle.sup()});
+        return this.clone({ mathstyle: this.mathstyle.sup() });
     }
 }
 
 export default {
-    Context
-}
+    Context,
+};

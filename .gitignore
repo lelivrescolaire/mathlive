@@ -21,3 +21,4 @@ ehthumbs.db
 Thumbs.db
 #IDE files
 .idea
+dist/

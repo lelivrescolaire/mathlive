@@ -934,7 +934,7 @@ category = 'Environments';
                 first row left aligned, last right aligned, others centered
                 last line has an eqn. counter. multline* will omit the counter
                 no output if inside an equation
-                
+
 
 'gather'        at most two columns
                 first column centered, second column right aligned
@@ -3624,17 +3624,17 @@ const COMMAND_MODE_CHARACTERS = /[a-zA-Z0-9!@*()-=+{}[\]\\';:?/.,~<>`|'$%#&^_" ]
 // but Firefox doesn't support it
 // (https://bugzilla.mozilla.org/show_bug.cgi?id=1361876). Booo...
 // See also https://stackoverflow.com/questions/26133593/using-regex-to-match-international-unicode-alphanumeric-characters-in-javascript
+
+// Edit : https://github.com/arnog/mathlive/issues/195#issuecomment-493741744
 const LETTER =
-    typeof navigator !== 'undefined' &&
-    /firefox|edge/i.test(navigator.userAgent)
-        ? /[a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/
-        : new RegExp('\\p{Letter}', 'u');
+   // typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent) ?
+       /[a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/; // :
+   //    new RegExp("\\p{Letter}", 'u');
 
 const LETTER_AND_DIGITS =
-    typeof navigator !== 'undefined' &&
-    /firefox|edge/i.test(navigator.userAgent)
-        ? /[0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/
-        : new RegExp('[0-9\\p{Letter}]', 'u');
+   // typeof navigator !== 'undefined'  && /firefox/i.test(navigator.userAgent) ?
+      /[0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/; // :
+    //   new RegExp("[0-9\\p{Letter}]", 'u');
 
 export default {
     matchCodepoint,

@@ -15,6 +15,7 @@ export default [
                     warnings: true,
                     passes: 2,
                 },
+                safari10: true
             }),
             copy({
                 targets: [

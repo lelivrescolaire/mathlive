@@ -1,3 +1,33 @@
+⚠️ Fork to fix IE 11 + Edge issue ⚠️
+Based on https://github.com/arnog/mathlive/issues/195
+
+Global changes :
+
+```diff
+// src/core/definitions.js
+
++// Edit : https://github.com/arnog/mathlive/issues/195#issuecomment-493741744
+-const LETTER =
+-   typeof navigator !== 'undefined' && /firefox|edge/i.test(navigator.userAgent) ?
+-       /[a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/ :
+-       new RegExp("\\p{Letter}", 'u');
+
++const LETTER =
++   // typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent) ?
++       /[a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/; // :
++   //    new RegExp("\\p{Letter}", 'u');
+
+-const LETTER_AND_DIGITS =
+-   typeof navigator !== 'undefined'  && /firefox|edge/i.test(navigator.userAgent) ?
+-       /[0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/ :
+-      new RegExp("[0-9\\p{Letter}]", 'u');
+
++const LETTER_AND_DIGITS =
++   // typeof navigator !== 'undefined'  && /firefox/i.test(navigator.userAgent) ?
++      /[0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяĄąĆćĘęŁłŃńÓóŚśŹźŻżàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒäöüßÄÖÜẞàèéìíîòóùúÀÈÉÌÍÎÒÓÙÚáéíñóúüÁÉÍÑÓÚÜ]/; // :
++    //   new RegExp("[0-9\\p{Letter}]", 'u');
+```
+
 <img alt="math live" src="assets/logo.png?raw=true">
 
 [![Maintenance](https://img.shields.io/maintenance/yes/2020.svg)]()
@@ -24,20 +54,20 @@ Try it at [mathlive.io](https://mathlive.io)
 <table align="center" >
     <tr>
         <td width='50%' align='center' style="border:none;">
-            <img alt="The popover panel" 
-            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee' 
+            <img alt="The popover panel"
+            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee'
             src="assets/screenshots/popover.png">
         </td>
         <td width='50%' align='center' style="border:none;">
-            <img alt="A Virtual Keyboard" 
-            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee' 
+            <img alt="A Virtual Keyboard"
+            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee'
             src="assets/screenshots/virtualKeyboard.png">
         </td>
     </tr>
     <tr style="background-color: initial; border: none;">
         <td colspan="2" align="center" style="border:none;">
-            <img width="50%" alt="The Loop Equation" 
-            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee' 
+            <img width="50%" alt="The Loop Equation"
+            style='margin:15px; box-shadow: 0px 5px 15px #000; border: 1px solid #eee'
             src="assets/screenshots/loop-eqn.png">
         </td>
     </tr>

@@ -32,7 +32,6 @@
         smartMode: true,
         virtualKeyboardMode: 'manual',
         onContentDidChange: mf => {
-            console.log('here')
             const latex = mf.$text();
             document.getElementById('latex').innerHTML = escapeHtml(latex);
 

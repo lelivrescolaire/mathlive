@@ -984,8 +984,6 @@ class MathField {
         if (typeof this.config.onSelectionDidChange === 'function') {
             this.config.onSelectionDidChange(this);
         }
-        this.removeIsolatedSpace_();
-        this.mathlist.contentDidChange();
     }
     _onContentDidChange() {
         if (this.undoManager.canRedo()) {
@@ -2672,18 +2670,18 @@ class MathField {
      * is used (default)
      *
      * @param {object} options.style
-     * 
+     *
      * @param {boolean} options.resetStyle - If true, the style after the insertion
      * is the same as the style before. If false, the style after the
      * insertion is the style of the last inserted atom.
      *
      * @param {boolean} options.smartFence - If true, promote plain fences, e.g. `(`,
      * as `\left...\right` or `\mleft...\mright`
-     * 
+     *
      * @param {boolean} options.suppressChangeNotifications - If true, the
      * handlers for the contentWillChange, contentDidChange, selectionWillChange and
      * selectionDidChange notifications will not be invoked. Default `false`.
-     * 
+     *
      * @category Changing the Content
      * @method MathField#$insert
      */

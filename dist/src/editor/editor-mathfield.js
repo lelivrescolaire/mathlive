@@ -1000,6 +1000,8 @@ class MathField {
         if (typeof this.config.onSelectionDidChange === 'function') {
             this.config.onSelectionDidChange(this);
         }
+        this.removeIsolatedSpace_();
+        this.mathlist.contentDidChange();
     }
     _onContentDidChange() {
         if (this.undoManager.canRedo()) {

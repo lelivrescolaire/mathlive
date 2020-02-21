@@ -100,71 +100,6 @@ writeCookie('symbol-access', 'private')
 
     
 
-    
-
-    
-
-    
-
-
-    <h5 class="subsection-title">Properties</h5>
-
-    
-
-
-    
-
-        <div class="property">
-            
-                <span class="name"><code>element</code></span>
-            
-
-            <span class="type">
-            
-                : 
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </span>
-
-            
-
-            
-
-            <span class="description last"><p>The DOM element this mathfield is attached to.</p>
-                
-            </span>
-        </div>
-
-    
-
-        <div class="property">
-            
-                <span class="name"><code>config</code></span>
-            
-
-            <span class="type">
-            
-                : 
-<span class="param-type">[string]:any</span>
-
-
-            
-            </span>
-
-            
-
-            
-
-            <span class="description last"><p>A set of key/value pairs that can
-be used to customize the behavior of the mathfield</p>
-                
-            </span>
-        </div>
-
-    
-
         <div class="property">
             
                 <span class="name"><code>id</code></span>
@@ -198,7 +133,7 @@ be used to customize the behavior of the mathfield</p>
             <span class="type">
             
                 : 
-<span class="param-type">boolean</span>
+<span class="param-type">HTMLElement</span>
 
 
             
@@ -366,6 +301,449 @@ past keystrokes</p>
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class='method'>
+
+    
+
+    <h4 class="name" id="$applyStyle">$applyStyle<span class="signature">(style<span class="signature-type">: object</span>)</span><span class="type-signature"></span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Apply a style (color, bold, italic, etc...).</p>
+<p>If there is a selection, the style is applied to the selection</p>
+<p>If the selection already has this style, remove it. If the selection
+has the style partially applied (i.e. only some sections), remove it from
+those sections, and apply it to the entire selection.</p>
+<p>If there is no selection, the style will apply to the next character typed.</p>
+</div>
+
+
+
+
+
+
+
+
+    
+
+    
+        <!-- <h5>Parameters</h5> -->
+        <div class='param'>
+
+    
+
+        <div class="signature">
+            
+                <span class="name"><code>style</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">object</span>
+
+
+            
+            </span>
+
+            
+
+            
+
+            
+                    <p class="description last">
+                        <p>an object with the following properties. All the
+properties are optional, but they can be combined.</p>
+                    </p>
+                    
+                        <div class='param'>
+
+    
+
+        <div class="signature">
+            
+                <span class="name"><code>style.mode</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+                <span class="attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                <span class="default">= ''</span>
+            
+
+            
+                    <p class="description last">
+                        <p>Either <code>'math'</code>, <code>'text'</code> or '<code>command</code>'</p>
+                    </p>
+                    
+            
+        </div>
+
+    
+
+        <div class="signature">
+            
+                <span class="name"><code>style.color</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+                <span class="attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                <span class="default">= ''</span>
+            
+
+            
+                    <p class="description last">
+                        <p>The text/fill color, as a CSS RGB value or
+a string for some 'well-known' colors, e.g. 'red', '#f00', etc...</p>
+                    </p>
+                    
+            
+        </div>
+
+    
+
+        <div class="signature">
+            
+                <span class="name"><code>style.backgroundColor</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+                <span class="attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                <span class="default">= ''</span>
+            
+
+            
+                    <p class="description last">
+                        <p>The background color.</p>
+                    </p>
+                    
+            
+        </div>
+
+    
+
+        <div class="signature">
+            
+                <span class="name"><code>style.fontFamily</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+                <span class="attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                <span class="default">= ''</span>
+            
+
+            
+                    <p class="description last">
+                        <p>The font family used to render text.
+This value can the name of a locally available font, or a CSS font stack, e.g.
+&quot;Avenir&quot;, &quot;Georgia, serif&quot;, etc...
+This can also be one of the following TeX-specific values:</p>
+<ul>
+<li>'cmr': Computer Modern Roman, serif</li>
+<li>'cmss': Computer Modern Sans-serif, latin characters only</li>
+<li>'cmtt': Typewriter, slab, latin characters only</li>
+<li>'cal': Calligraphic style, uppercase latin letters and digits only</li>
+<li>'frak': Fraktur, gothic, uppercase, lowercase and digits</li>
+<li>'bb': Blackboard bold, uppercase only</li>
+<li>'scr': Script style, uppercase only</li>
+</ul>
+                    </p>
+                    
+            
+        </div>
+
+    
+
+        <div class="signature">
+            
+                <span class="name"><code>style.series</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+                <span class="attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                <span class="default">= ''</span>
+            
+
+            
+                    <p class="description last">
+                        <p>The font 'series', i.e. weight and
+stretch. The following values can be combined, for example: &quot;ebc&quot;: extra-bold,
+condensed. Aside from 'b', these attributes may not have visible effect if the
+font family does not support this attribute:</p>
+<ul>
+<li>'ul' ultra-light weight</li>
+<li>'el': extra-light</li>
+<li>'l': light</li>
+<li>'sl': semi-light</li>
+<li>'m': medium (default)</li>
+<li>'sb': semi-bold</li>
+<li>'b': bold</li>
+<li>'eb': extra-bold</li>
+<li>'ub': ultra-bold</li>
+<li>'uc': ultra-condensed</li>
+<li>'ec': extra-condensed</li>
+<li>'c': condensed</li>
+<li>'sc': semi-condensed</li>
+<li>'n': normal (default)</li>
+<li>'sx': semi-expanded</li>
+<li>'x': expanded</li>
+<li>'ex': extra-expanded</li>
+<li>'ux': ultra-expanded</li>
+</ul>
+                    </p>
+                    
+            
+        </div>
+
+    
+
+        <div class="signature">
+            
+                <span class="name"><code>style.shape</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+                <span class="attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                <span class="default">= ''</span>
+            
+
+            
+                    <p class="description last">
+                        <p>The font 'shape', i.e. italic.</p>
+<ul>
+<li>'auto': italic or upright, depending on mode and letter (single letters are
+italic in math mode)</li>
+<li>'up': upright</li>
+<li>'it': italic</li>
+<li>'sl': slanted or oblique (often the same as italic)</li>
+<li>'sc': small caps</li>
+<li>'ol': outline</li>
+</ul>
+                    </p>
+                    
+            
+        </div>
+
+    
+
+        <div class="signature">
+            
+                <span class="name"><code>style.size</code></span>
+            
+
+            <span class="type">
+            
+                : 
+<span class="param-type">string</span>
+
+
+            
+            </span>
+
+            
+                <span class="attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                <span class="default">= ''</span>
+            
+
+            
+                    <p class="description last">
+                        <p>The font size:  'size1'...'size10'
+'size5' is the default size</p>
+                    </p>
+                    
+            
+        </div>
+
+    
+</div>
+
+                    
+            
+        </div>
+
+    
+</div>
+
+    
+
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+
+</div>
 
         
             

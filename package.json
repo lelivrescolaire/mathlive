@@ -23,7 +23,8 @@
         "mathquill"
     ],
     "files": [
-        "/dist"
+        "/dist",
+        "/src"
     ],
     "main": "./dist/mathlive.js",
     "types": "./dist/mathlive.d.ts",

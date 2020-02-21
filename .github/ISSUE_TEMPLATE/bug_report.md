@@ -13,6 +13,14 @@ assignees: ''
 
 > We welcome both individual and corporate sponsors. In addition to Patreon and PayPal, we can also accept short-term development contracts for specific features or maintenance of the project.
 
+**Funding**
+
+> If you're using MathLive consider donating to project development via [Patreon](https://patreon.com/arnog) (recurring donation) or [PayPal](https://www.paypal.me/arnogourdol) (one time donation).
+
+> Issues submitted by funding partners are given higher priority.
+
+> We welcome both individual and corporate sponsors. In addition to Patreon and PayPal, we can also accept short-term development contracts for specific features or maintenance of the project.
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 

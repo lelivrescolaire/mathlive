@@ -25,7 +25,7 @@
         <a href="/">Return to the homepage&nbsp;<svg class="fa-w-24" height="24px"><use xlink:href="../icons.svg#angle-right" /></svg></a>
     </footer>
 
-<script type='module'> 
+<script type='module'>
     import MathLive from '/dist/mathlive.mjs';
     // import MathLive from 'https://unpkg.com/mathlive/dist/mathlive.mjs';
 
@@ -33,15 +33,16 @@
         smartMode: true,
         virtualKeyboardMode: 'manual',
         onContentDidChange: mf => {
+            console.log('j')
             const latex = mf.$text();
             document.getElementById('latex').innerHTML = escapeHtml(latex);
 
             const mathJSON = MathLive.latexToAST(latex);
-            document.getElementById('mathjson').innerHTML = 
+            document.getElementById('mathjson').innerHTML =
                 escapeHtml(JSON.stringify(mathJSON)) ;
         }
     });
-    
+
     function escapeHtml (string) {
     return String(string).replace(/[&<>"'`=/\u200b]/g, function (s) {
         return {

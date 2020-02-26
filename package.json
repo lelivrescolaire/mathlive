@@ -1,5 +1,5 @@
 {
-    "name": "mathlive",
+    "name": "@lls/mathlive",
     "version": "0.33.3",
     "description": "Render and edit beautifully typeset math",
     "license": "MIT",

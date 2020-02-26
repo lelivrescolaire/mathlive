@@ -4,7 +4,7 @@
 /out
 /node_modules
 /.nyc_output
-
+dist
 babel.babel
 TODO.md
 examples/basic/index.debug.html

@@ -1,10 +1,11 @@
 import { terser } from 'rollup-plugin-terser';
 import copy from 'rollup-plugin-copy';
-
+import babel from 'rollup-plugin-babel';
 export default [
     {
         input: 'src/mathlive.js',
         plugins: [
+            babel(),
             terser({
                 sourcemap: false,
                 compress: {

@@ -92,6 +92,10 @@ else
     printf "\033[32m ● \033[0m Making a \033[33m%s\033[0m build" "$BUILD"
     npx rollup --silent --config 
     echo -e "\033[2K\033[80D\033[32m ✔ \033[33m" $BUILD "\033[0m build done"
+ 
+    printf "\033[32m ● \033[0m Making a \033[33m%s\033[0m build es5 " "$BUILD"
+    npx babel -o dist/mathlive.js dist/mathlive.es6.js
+    echo -e "\033[2K\033[80D\033[32m ✔ \033[33m" $BUILD "\033[0m build es5 done"
 
     if [ "$BUILD" = "production" ]; then
         # Optimize CSS

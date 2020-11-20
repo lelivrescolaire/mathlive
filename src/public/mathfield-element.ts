@@ -1150,8 +1150,9 @@ declare global {
         MathfieldElement: typeof MathfieldElement;
     }
 }
-
-if (!window.customElements.get('math-field')) {
-    window.MathfieldElement = MathfieldElement;
-    window.customElements.define('math-field', MathfieldElement);
+if (typeof window != 'undefined' && window.customElements) {
+    if (!window.customElements.get('math-field')) {
+        window.MathfieldElement = MathfieldElement;
+        window.customElements.define('math-field', MathfieldElement);
+    }
 }

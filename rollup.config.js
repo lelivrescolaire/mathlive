@@ -189,7 +189,7 @@ const ROLLUP = [
                   {
                       format: 'umd',
                       name: 'MathLive',
-                      file: `${BUILD_DIRECTORY}/mathlive.js`,
+                      file: `${BUILD_DIRECTORY}/mathlive.es6.js`,
                       sourcemap: !PRODUCTION,
                       exports: 'named',
                   },
@@ -256,7 +256,7 @@ if (PRODUCTION) {
             {
                 format: 'umd',
                 name: 'MathLive',
-                file: `${BUILD_DIRECTORY}/mathlive.min.js`,
+                file: `${BUILD_DIRECTORY}/mathlive.min.es6.js`,
                 sourcemap: false,
             },
         ],

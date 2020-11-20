@@ -8,7 +8,7 @@
 babel.babel
 TODO.md
 examples/basic/index.debug.html
-
+dist/*
 # To store secret credentials
 *.secret.js
 

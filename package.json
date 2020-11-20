@@ -58,10 +58,7 @@
         "node": ">=12.0.0"
     },
     "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "maintained node versions",
-        "not dead"
+        "> 0.5%"
     ],
     "author": "Arno Gourdol <arno@arno.org>",
     "contributors": [
@@ -84,6 +81,8 @@
         "paosder <denjaraos@gmail.com>"
     ],
     "devDependencies": {
+        "@babel/cli": "7.12.1",
+        "@babel/preset-env": "7.12.1",
         "@babel/types": "^7.12.6",
         "@cortex-js/prettier-config": "^1.0.0",
         "@rollup/plugin-node-resolve": "^10.0.0",
@@ -93,6 +92,7 @@
         "@typescript-eslint/eslint-plugin": "^4.7.0",
         "@typescript-eslint/parser": "^4.7.0",
         "@typescript-eslint/typescript-estree": "^4.7.0",
+        "acorn-private-class-elements": "0.2.7",
         "autoprefixer": "^9.8.6",
         "check-node-version": "^4.0.3",
         "cssnano": "^4.1.10",

@@ -1,6 +1,6 @@
 {
-    "name": "@lls/mathlive",
-    "version": "0.33.7",
+    "name": "mathlive",
+    "version": "0.59.0",
     "description": "Render and edit beautifully typeset math",
     "license": "MIT",
     "funding": {
@@ -11,6 +11,114 @@
         "type": "git",
         "url": "https://github.com/lelivrescolaire/mathlive.git"
     },
+    "bugs": "https://github.com/arnog/mathlive/issues/",
+    "scripts": {
+        "build": "bash ./scripts/build.sh",
+        "clean": "rimraf build dist coverage",
+        "dist": "bash ./scripts/build.sh production",
+        "lint": "eslint --fix src/",
+        "start": "bash ./scripts/build.sh watch",
+        "test": "bash ./scripts/test.sh",
+        "version": "bash ./scripts/version.sh",
+        "postversion": "bash ./scripts/github-release.sh"
+    },
+    "main": "./dist/mathlive.js",
+    "module": "./dist/mathlive.mjs",
+    "types": "./dist/public/mathlive.d.ts",
+    "files": [
+        "/dist",
+        "/src"
+    ],
+    "prettier": {
+        "singleQuote": true,
+        "trailingComma": "es5",
+        "endOfLine": "lf",
+        "tabWidth": 4,
+        "jsxSingleQuote": true
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged && bash ./scripts/pre-commit.sh",
+            "pre-push": "npm test"
+        }
+    },
+    "lint-staged": {
+        "/src/**/*.ts": [
+            "eslint --fix"
+        ],
+        "/src/**/*.{ts,css,json,less}": [
+            "prettier --write"
+        ],
+        "/*.md": [
+            "prettier --write"
+        ]
+    },
+    "engines": {
+        "npm": ">=6.14.8",
+        "node": ">=12.0.0"
+    },
+    "browserslist": [
+        "> 0.5%"
+    ],
+    "author": "Arno Gourdol <arno@arno.org>",
+    "contributors": [
+        "Louis Larpin (lilfaf.github.io)",
+        "Neil Soiffer (https://github.com/NSoiffer)",
+        "Jason Boxman (https://github.com/jboxman)",
+        "Synergy Codes (https://www.synergycodes.com/)",
+        "Rafał Piekarski (https://github.com/rpdiss)",
+        "Kajetan Champlewski <kchamplewski@gmail.com>",
+        "Fabian Grewing <Fabian.Heimbuerger@gmail.com>",
+        "Paul Masson <paulmasson@comcast.net>",
+        "Soroush Javadi <soroush.javadi@gmail.com>",
+        "Thomas Schell <thom.schell@gmail.com>",
+        "leerobert <lee.robert.138@gmail.com>",
+        "spirobel <spirobel@protonmail.com>",
+        "Artur Fijał <afijal@soldevelo.com>",
+        "David Le Jolly <david.lejolly@gmail.com>",
+        "Johannes Wilm <johanneswilm@gmail.com>",
+        "Nick Gravelyn <nick@gravelyn.com>",
+        "paosder <denjaraos@gmail.com>"
+    ],
+    "devDependencies": {
+        "@babel/cli": "7.12.1",
+        "@babel/preset-env": "7.12.1",
+        "@babel/types": "^7.12.6",
+        "@cortex-js/prettier-config": "^1.0.0",
+        "@rollup/plugin-node-resolve": "^10.0.0",
+        "@types/css-font-loading-module": "0.0.4",
+        "@types/jest": "^26.0.15",
+        "@types/node": "^14.14.7",
+        "@typescript-eslint/eslint-plugin": "^4.7.0",
+        "@typescript-eslint/parser": "^4.7.0",
+        "@typescript-eslint/typescript-estree": "^4.7.0",
+        "acorn-private-class-elements": "0.2.7",
+        "autoprefixer": "^9.8.6",
+        "check-node-version": "^4.0.3",
+        "cssnano": "^4.1.10",
+        "eslint": "^7.13.0",
+        "eslint-config-prettier": "^6.15.0",
+        "eslint-plugin-no-unsanitized": "^3.1.4",
+        "eslint-plugin-prettier": "^3.1.4",
+        "http-server": "^0.12.3",
+        "husky": "^4.3.0",
+        "jest": "^26.6.3",
+        "jest-silent-reporter": "^0.3.0",
+        "less": "^3.12.2",
+        "lint-staged": "^10.5.1",
+        "postcss-cli": "^7.1.2",
+        "prettier": "^2.1.2",
+        "rimraf": "^3.0.2",
+        "rollup": "^2.33.2",
+        "rollup-plugin-copy": "^3.3.0",
+        "rollup-plugin-eslint": "^7.0.0",
+        "rollup-plugin-postcss": "^3.1.8",
+        "rollup-plugin-terser": "^7.0.2",
+        "rollup-plugin-typescript2": "^0.29.0",
+        "ts-jest": "^26.4.4",
+        "typescript": "^4.0.5"
+    },
+    "dependencies": {},
     "keywords": [
         "math",
         "editor",
@@ -21,107 +129,5 @@
         "mathjax",
         "katex",
         "mathquill"
-    ],
-    "files": [
-        "/dist",
-        "/src"
-    ],
-    "main": "./dist/mathlive.js",
-    "types": "./dist/mathlive.d.ts",
-    "scripts": {
-        "clean": "rimraf build dist docs",
-        "build-js": "npx rollup --config",
-        "watch-js": "npx rollup --config --watch",
-        "build-corecss": "lessc css/mathlive.core.less dist/mathlive.core.css",
-        "build-othercss": "lessc css/mathlive.less dist/mathlive.css",
-        "build-postcss": "npx postcss dist/*.css -d dist",
-        "build-css": "npm-run-all -s build-corecss build-othercss build-postcss",
-        "watch-css": "chokidar \"css/*.less\" --initial -c \"npm run build-css -s\"",
-        "build-ts-types": "jsdoc -t node_modules/tsd-jsdoc/dist -d ./build -a public -r ./src/",
-        "build": "npm-run-all build-css build-ts-types build-js",
-        "watch": "npm-run-all -p watch-*",
-        "http-server": "http-server . -c-1 --cors='*' -o examples/index.html",
-        "start": "npm-run-all -p watch-js watch-css http-server",
-        "lint": "prettier --ignore-path ./.prettierignore --write \"**/*.{ts,js,css,md,yml,json}\" \"!dist/**\" \"!docs/**\" \"!examples/**\"",
-        "test": "tape -r @babel/register test/* | tap-spec",
-        "watch-test": "chokidar \"src/*.js\" -c \"npm run test -s\" ",
-        "coverage": "nyc npm run babel-node ./test/test.js && nyc report",
-        "coverage:report": "nyc report",
-        "prepare": "",
-        "docs": "jsdoc -c ./jsdoc.conf.json && printf \"docs.mathlive.io\" > docs/CNAME",
-        "watch-docs": "chokidar \"src/*.js\" \"tutorials/*.md\" \"examples/*.md\" -c \"npm run docs -s\"",
-        "dist": "npm-run-all -s clean build docs",
-        "deploy": "bash ./scripts/deploy",
-        "deploy-ci": "bash ./scripts/deploy-ci"
-    },
-    "prettier": "@cortex-js/prettier-config",
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
-    },
-    "lint-staged": {
-        "/src/**/*.js": [
-            "eslint --fix",
-            "git add"
-        ],
-        "*.{js,css,json,md}": [
-            "prettier --write",
-            "git add"
-        ]
-    },
-    "nyc": {
-        "exclude": [
-            "test",
-            "**/debug.js",
-            "dist",
-            "build"
-        ],
-        "report-dir": "./build/coverage",
-        "reporter": "html"
-    },
-    "engines": {
-        "npm": ">=6.13",
-        "node": ">=10.0"
-    },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "maintained node versions",
-        "not dead"
-    ],
-    "devDependencies": {
-        "@babel/cli": "7.12.1",
-        "@babel/core": "7.12.3",
-        "@babel/preset-env": "7.12.1",
-        "@babel/register": "7.12.1",
-        "@cortex-js/prettier-config": "^1.0.0",
-        "autoprefixer": "10.0.1",
-        "chokidar-cli": "^2.1.0",
-        "cssnano": "^4.1.10",
-        "eslint": "7.13.0",
-        "eslint-config-prettier": "6.15.0",
-        "eslint-plugin-prettier": "3.1.4",
-        "eslint-watch": "7.0.0",
-        "http-server": "0.12.3",
-        "husky": "4.3.0",
-        "jsdoc": "3.6.6",
-        "less": "3.12.2",
-        "lint-staged": "10.5.1",
-        "npm-run-all": "^4.1.5",
-        "nyc": "15.1.0",
-        "postcss": "8.1.6",
-        "postcss-cli": "8.2.0",
-        "prettier": "2.1.2",
-        "rimraf": "3.0.2",
-        "rollup": "2.33.1",
-        "rollup-plugin-babel": "4.4.0",
-        "rollup-plugin-copy": "^3.3.0",
-        "rollup-plugin-terser": "7.0.2",
-        "sutro-jsdoc-theme": "^1.0",
-        "tap-spec": "^5.0.0",
-        "tape": "5.0.1",
-        "tsd-jsdoc": "2.5.0"
-    },
-    "dependencies": {}
+    ]
 }

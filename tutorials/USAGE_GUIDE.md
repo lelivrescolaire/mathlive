@@ -5,30 +5,23 @@ To contribute to the MathLive project, see the {@tutorial CONTRIBUTOR_GUIDE}.
 
 ## Getting Started
 
-Install MathLive from a CDN, from NPM or from GitHub.
+Use MathLive from a CDN, from NPM or from GitHub.
 
 ### Using a CDN
 
 Using a CDN is the simplest approach, as it does not require any configuration:
 
 ```html
-<head>
-    ...
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/mathlive/dist/mathlive.core.css"
-    />
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/mathlive/dist/mathlive.css"
-    />
-</head>
-<script src="https://unpkg.com/mathlive"></script>
-<div id="mathfield">f(x)</div>
-<script>
-    MathLive.makeMathField('mathfield');
-</script>
+<!DOCTYPE html>
+<html lang="en-US">
+    <math-field>f(x)</math-field>
+    <script src="https://unpkg.com/mathlive/dist/mathlive.min.js'"></script>
+</html>
 ```
+
+Note that the HTML quirks mode is not supported. This means that the host page
+must use the strict mode, indicated by a `<!doctype html>` directive at the
+top of the page.
 
 ### Using NPM
 
@@ -51,36 +44,14 @@ The `dist/` directory contains the following:
     module which gives access to the MathLive API.
 -   `mathlive.js` Same as `mathlive.mjs` but as a UMD (Universal Module Definition)
     file which can be imported using a module loader such as requirejs.
--   `mathlive-core.css` The minimal amount of CSS to display math with MathLive.
--   `mathlive.css` The rest of the CSS you need to display math. You can load
-    this file lazily to improve your page load time.
 -   `fonts/` A directory of fonts used by MathLive. Credit for those fonts goes to
     the KaTeX project.
--   `src/` The source code for MathLive, as native JavaScript modules. Can be
-    useful for debugging, but in general `mathlive.mjs` will be sufficient (you only
-    need one or the other).
-
-### Using MathLive in your project
-
-Include the following in your web page. Adjust the `src` and `href` arguments
-to account for your directory structure.
-
-```html
-<!DOCTYPE html>
-<html lang="en-US">
-    <head>
-        ...
-        <link rel="stylesheet" href="dist/mathlive.core.css" />
-        <link rel="stylesheet" href="dist/mathlive.css" />
-    </head>
-    <body>
-        ...
-        <script type="module">
-            import MathLive from 'dist/mathlive.mjs';
-        </script>
-    </body>
-</html>
-```
+-   `*.d.ts` TypeScript declaration files
+-   `mathlive-static.css` an optional stlysheet which can be used if you need to
+    render some markup created by Mathlive. Use this only if you do _not_ include
+    the Mathlive library in your page. Mathlive will automatically inject any
+    needed CSS in the page. The `fonts` folder should be placed next to
+    this stylesheet.
 
 ## Rendering Math Automatically
 
@@ -90,8 +61,8 @@ in the document.
 
 ```html
 <script type="module">
-    import MathLive from 'dist/mathlive.mjs';
-    MathLive.renderMathInDocument();
+    import { renderMathInDocument } from 'dist/mathlive.min.mjs';
+    renderMathInDocument();
 </script>
 ```
 
@@ -140,8 +111,8 @@ been rendered, in which case they will be rendered again. This is useful
 if something in the environment changes that could require the layout to be
 updated.
 
-The {@linkcode module:mathlive#renderMathInElement MathLive.renderMathInElement()} and
-{@linkcode module:mathlive#renderMathInDocument MathLive.renderMathInDocument()}
+The {@linkcode module:mathlive#renderMathInElement | MathLive.renderMathInElement()} and
+{@linkcode module:mathlive#renderMathInDocument | MathLive.renderMathInDocument()}
 functions take an optional `options` object which can be used to customize their
 behavior:
 
@@ -181,58 +152,47 @@ MathLive.renderMathInElement(document.getElementById('formulas'), {
 
 ## Using the Math Editor with JavaScript
 
-To transform an existing HTML element into a mathfield, call
-{@linkcode module:mathlive#makeMathField MathLive.makeMathField(element, options)}.
+You can place a mathfield on a page using the `<math-field>` tag or
+create a new Mathfield element with `new MathfieldElement()`.
 
-Think of this original element as a placeholder. Typically, a `<div>` would
-be appropriate. If the element contains some LaTeX text, it will be used as the
-initial value of the mathfield.
-
-For example:
+You can interact with the mathfield using the methods of the Mathfield interface
+or register event handlers to be notified when the internal state of the
+mathfield changes.
 
 ```html
 <!DOCTYPE html>
 <html lang="en-US">
-    <head>
-        <meta charset="utf-8" />
-        <title>MathLive Sample</title>
-
-        <link rel="stylesheet" href="dist/mathlive.core.css" />
-        <link rel="stylesheet" href="dist/mathlive.css" />
-    </head>
     <body>
-        <div id="mathfield" style="border: 1px solid #999;padding:5px;">
+        <math-field id="formula" style="border: 1px solid #999;padding:5px;">
             f(x)=
-        </div>
+        </math-field>
         <script type="module">
-            import MathLive from 'dist/mathlive.mjs';
-            const mathfield = MathLive.makeMathField(
-                document.getElementById('mathfield')
-            );
+            import 'dist/mathlive.min.mjs';
+            document
+                .getElementById('formula')
+                .addEventListener('input', (ev) =>
+                    console.log(ev.target.value)
+                );
         </script>
     </body>
 </html>
 ```
 
-You can control the mathfield using the public member functions of `MathField`,
-that is, functions that do not contain an `_` at the beginning or end of their name.
 Here's a short list for some common operations:
 
--   `$el()` the DOM element associated with this mathfield
--   `$text(format)` return a textual representation of the content of the math
+-   `getValue(format)` return a textual representation of the content of the math
     field, `format` can be either `"latex"` (default), `"spoken"` or `"mathML"`.
--   `$insert(content, options)` insert the specified content at the current
+    You can also directly access the latex value with `mathfield.value`
+-   `insert(content, options)` insert the specified content at the current
     insertion point. With `options` it is possible to specify the insertion mode,
     as well as what will be selected after the insertion. If the content contains
     a `#?` a placeholder will be indicated in its stead. The `#0` sequence will
     be replaced by the item currently selected (or a placeholder if nothing is
     selected)
--   `$setConfig()` customize how the mathfield behaves, as well as provide
+-   `setOptions()` customize how the mathfield behaves, as well as provide
     notification handlers, for example when the selection changes, or when
     navigation exists the mathfield.
--   `$select()` select all the items in the mathfield
--   `$clearSelection()` deletes the selection
--   `$perform()` executes a command such as moving the insertion point. Typically
+-   `excuteCommand()` executes a command such as moving the insertion point. Typically
     invoked in response to a user action, such as pressing a keyboard shortcut
     or pushing a button. The command will be undoable. See the list of available
     commands in the **Selectors** section below.
@@ -240,14 +200,14 @@ Here's a short list for some common operations:
 ## Selectors
 
 User initiated commands that control the mathfield can be dispatched using
-the [`perform()`]{@link MathField#perform} commands. Commands are identified by
+the [`executeCommand()`]{@link Mathfield#executeCommand} commands. Commands are identified by
 a string called the **selector**. Most commands take no parameters. When a
 command does have a parameter, an array made up of the selector and the
-commands arguments can be passed to [`MathField.$perform()`]{@link MathField#\$perform}.
+commands arguments can be passed to [`Mathfield.executeCommand()`]{@link Mathfield#executeCommand}.
 For example:
 
 ```javascript
-mf.$perform(['insert', '(#0)']);
+mf.executeCommand(['insert', '(#0)']);
 ```
 
 will insert an open and close parenthesis around the selection (the `#0`

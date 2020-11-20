@@ -1,7 +1,0 @@
-{
-  "presets": [["@babel/env", {
-    "targets": {
-      "browsers": ["> 0.5%"]
-    }
-  }]]
-}

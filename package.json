@@ -78,6 +78,8 @@
     ],
     "devDependencies": {
         "@babel/cli": "7.12.1",
+        "@babel/plugin-proposal-class-properties": "7.12.1",
+        "@babel/plugin-transform-classes": "7.12.1",
         "@babel/preset-env": "7.12.1",
         "@babel/types": "^7.12.6",
         "@cortex-js/prettier-config": "^1.0.0",

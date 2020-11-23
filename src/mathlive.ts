@@ -1,3 +1,4 @@
+import '@webcomponents/webcomponentsjs';
 import type { Mathfield } from './public/mathfield';
 import type { MathfieldOptions, TextToSpeechOptions } from './public/options';
 import type {

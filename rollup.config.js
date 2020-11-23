@@ -174,51 +174,22 @@ const ROLLUP = [
             }),
             typescript(TYPESCRIPT_OPTIONS),
         ],
-        output: true
-            ? [
-                  // JavaScript native module
-                  // (stricly speaking not necessary, since the UMD output is module
-                  // compatible, but this gives us a "clean" module)
-                  {
-                      format: 'es',
-                      file: `${BUILD_DIRECTORY}/mathlive.mjs`,
-                      sourcemap: !PRODUCTION,
-                      exports: 'named',
-                  },
-                  // UMD file, suitable for import, <script> and require()
-                  {
-                      format: 'umd',
-                      name: 'MathLive',
-                      file: `${BUILD_DIRECTORY}/mathlive.es6.js`,
-                      sourcemap: !PRODUCTION,
-                      exports: 'named',
-                  },
-              ]
-            : [
-                  {
-                      format: 'es',
-                      file: `${BUILD_DIRECTORY}/mathlive.mjs`,
-                      sourcemap: !PRODUCTION,
-                  },
-              ],
+        output: [
+            // UMD file, suitable for import, <script> and require()
+            {
+                format: 'umd',
+                name: 'MathLive',
+                file: `${BUILD_DIRECTORY}/mathlive.es6.js`,
+                sourcemap: !PRODUCTION,
+                exports: 'named',
+            },
+        ],
         watch: {
             clearScreen: true,
             exclude: ['node_modules/**'],
         },
     },
 ];
-
-// MathLive Vue-js adapter
-ROLLUP.push({
-    input: 'src/vue-mathlive.js',
-    plugins: [terser(TERSER_OPTIONS)],
-    output: {
-        // JavaScript native module
-        sourcemap: false,
-        file: 'dist/vue-mathlive.mjs',
-        format: 'es',
-    },
-});
 
 if (PRODUCTION) {
     // Minified versions
@@ -244,14 +215,6 @@ if (PRODUCTION) {
             terser(TERSER_OPTIONS),
         ],
         output: [
-            // JavaScript native module
-            // (stricly speaking not necessary, since the UMD output is module
-            // compatible, but this gives us a "clean" module)
-            {
-                format: 'es',
-                file: `${BUILD_DIRECTORY}/mathlive.min.mjs`,
-                sourcemap: false,
-            },
             // UMD file, suitable for import, <script> and require()
             {
                 format: 'umd',

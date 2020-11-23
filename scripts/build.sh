@@ -96,7 +96,7 @@ else
     printf "\033[32m ● \033[0m Making a \033[33m%s\033[0m build es5 " "$BUILD"
     npx babel -o dist/mathlive.js dist/mathlive.es6.js
     echo -e "\033[2K\033[80D\033[32m ✔ \033[33m" $BUILD "\033[0m build es5 done"
-
+    rm -f dist/mathlive.es6.js
     if [ "$BUILD" = "production" ]; then
         # Optimize CSS
         printf "\033[32m ● \033[0m Optimizing CSS"
@@ -106,7 +106,7 @@ else
         # Stamp the SDK version number
         printf "\033[32m ● \033[0m Stamping output files"
         find ./dist -type f -name '*.css' -exec bash -c 'sedi "1s/^/\/\* $SDK_VERSION \*\//" {}' \;
-        find ./dist -type f \( -name '*.mjs' -o -name '*.js' \) -exec bash -c 'sedi s/{{SDK_VERSION}}/$SDK_VERSION/g {}' \;
+        #find ./dist -type f \( -name '*.mjs' -o -name '*.js' \) -exec bash -c 'sedi s/{{SDK_VERSION}}/$SDK_VERSION/g {}' \;
         find ./dist -type f -name '*.d.ts' -exec bash -c 'sedi "1s/^/\/\* $SDK_VERSION \*\/$(printf '"'"'\r'"'"')/" {}' \;
         find ./dist -type f -name '*.d.ts' -exec bash -c 'sedi "s/{{SDK_VERSION}}/$SDK_VERSION/" {}' \;
         echo -e "\033[2K\033[80D\033[32m ✔ \033[0m Output files stamped"

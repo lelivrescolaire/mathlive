@@ -19,7 +19,6 @@
         "postversion": "bash ./scripts/github-release.sh"
     },
     "main": "./dist/mathlive.js",
-    "module": "./dist/mathlive.mjs",
     "types": "./dist/public/mathlive.d.ts",
     "files": [
         "/dist",

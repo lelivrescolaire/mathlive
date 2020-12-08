@@ -154,7 +154,7 @@ export function performWithFeedback(
         selector === 'moveToPreviousPlaceholder' ||
         selector === 'complete'
     ) {
-        mathfield.returnKeypressSound?.play().catch(console.warn);
+        //mathfield.returnKeypressSound?.play().catch(console.warn);
     } else if (
         selector === 'deleteBackward' ||
         selector === 'deleteForward' ||
@@ -165,9 +165,9 @@ export function performWithFeedback(
         selector === 'deleteToMathFieldStart' ||
         selector === 'deleteToMathFieldEnd'
     ) {
-        mathfield.deleteKeypressSound?.play().catch(console.warn);
+        //mathfield.deleteKeypressSound?.play().catch(console.warn);
     } else {
-        mathfield.keypressSound?.play().catch(console.warn);
+        //mathfield.keypressSound?.play().catch(console.warn);
     }
     return mathfield.executeCommand(selector);
 }

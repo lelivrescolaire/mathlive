@@ -163,58 +163,10 @@ export function update(
                 }
                 break;
             case 'plonkSound':
-                unloadSound(result.plonkSound);
-                result.plonkSound = loadSound(
-                    soundsDirectory,
-                    updates.plonkSound
-                );
                 break;
             case 'keypressSound':
-                unloadSound(result.keypressSound);
-                if (typeof updates.keypressSound === 'string') {
-                    const sound = loadSound(
-                        soundsDirectory,
-                        updates.keypressSound
-                    );
-                    result.keypressSound = {
-                        delete: sound,
-                        return: sound,
-                        spacebar: sound,
-                        default: sound,
-                    };
-                } else if (updates.keypressSound instanceof HTMLAudioElement) {
-                    result.keypressSound = {
-                        delete: updates.keypressSound,
-                        return: updates.keypressSound,
-                        spacebar: updates.keypressSound,
-                        default: updates.keypressSound,
-                    };
-                } else {
-                    if (!updates.keypressSound.default) {
-                        throw Error('Missing keypressSound.default');
-                    }
-                    result.keypressSound = { ...updates.keypressSound };
-                    result.keypressSound.default = loadSound(
-                        soundsDirectory,
-                        result.keypressSound.default
-                    );
-                    result.keypressSound.delete =
-                        loadSound(
-                            soundsDirectory,
-                            result.keypressSound.delete
-                        ) ?? updates.keypressSound.default;
-                    result.keypressSound.return =
-                        loadSound(
-                            soundsDirectory,
-                            result.keypressSound.return
-                        ) ?? updates.keypressSound.default;
-                    result.keypressSound.spacebar =
-                        loadSound(
-                            soundsDirectory,
-                            result.keypressSound.spacebar
-                        ) ?? updates.keypressSound.default;
-                }
                 break;
+                
             case 'onBlur':
             case 'onFocus':
             case 'onContentWillChange':
@@ -329,7 +281,7 @@ export function getDefault(): Required<MathfieldOptionsPrivate> {
         virtualKeyboardTheme: /android|cros/i.test(navigator?.userAgent)
             ? 'material'
             : 'apple',
-        keypressVibration: true,
+        keypressVibration: false,
         keypressSound: null,
         plonkSound: null,
         virtualKeyboardToolbar: 'default',

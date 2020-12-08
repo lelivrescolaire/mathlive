@@ -144,11 +144,11 @@ export class MathfieldPrivate implements Mathfield {
 
     private eventHandlingInProgress = '';
 
-    keypressSound: HTMLAudioElement;
-    spacebarKeypressSound: HTMLAudioElement;
-    returnKeypressSound: HTMLAudioElement;
-    deleteKeypressSound: HTMLAudioElement;
-    plonkSound: HTMLAudioElement;
+    keypressSound: boolean | HTMLAudioElement;
+    spacebarKeypressSound: boolean | HTMLAudioElement;
+    returnKeypressSound: boolean | HTMLAudioElement;
+    deleteKeypressSound: boolean | HTMLAudioElement;
+    plonkSound: boolean | HTMLAudioElement;
 
     /**
      * To create a mathfield, you would typically use {@linkcode makeMathField | MathLive.makeMathField()}
@@ -174,20 +174,13 @@ export class MathfieldPrivate implements Mathfield {
             ...options,
         });
 
-        this.plonkSound = this.options.plonkSound as HTMLAudioElement;
-        if (
-            typeof this.options.keypressSound !== 'string' &&
-            !(this.options.keypressSound instanceof HTMLAudioElement)
-        ) {
-            this.keypressSound = this.options.keypressSound
-                .default as HTMLAudioElement;
-            this.spacebarKeypressSound = this.options.keypressSound
-                .spacebar as HTMLAudioElement;
-            this.returnKeypressSound = this.options.keypressSound
-                .return as HTMLAudioElement;
-            this.deleteKeypressSound = this.options.keypressSound
-                .delete as HTMLAudioElement;
-        }
+        this.plonkSound = false
+        
+        this.keypressSound = false
+        this.spacebarKeypressSound = false
+        this.returnKeypressSound = false
+        this.deleteKeypressSound = false
+        
 
         this.element = element;
         element['mathfield'] = this;
@@ -578,7 +571,7 @@ export class MathfieldPrivate implements Mathfield {
         );
 
         this.plonkSound = this.options.plonkSound as HTMLAudioElement;
-        if (
+        if ( this.options.keypressSound && 
             typeof this.options.keypressSound !== 'string' &&
             !(this.options.keypressSound instanceof HTMLAudioElement)
         ) {
@@ -1031,7 +1024,7 @@ export class MathfieldPrivate implements Mathfield {
                 if (this.options.keypressVibration && navigator?.vibrate) {
                     navigator.vibrate(HAPTIC_FEEDBACK_DURATION);
                 }
-                this.keypressSound?.play();
+                //this.keypressSound?.play();
             }
             if (s === '\\\\') {
                 // This string is interpreted as an "insert row after" command

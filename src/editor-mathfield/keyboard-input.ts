@@ -401,7 +401,7 @@ export function onTypedText(
         if (mathfield.options.keypressVibration && navigator?.vibrate) {
             navigator.vibrate(HAPTIC_FEEDBACK_DURATION);
         }
-        mathfield.keypressSound?.play().catch(console.warn);
+        //mathfield.keypressSound?.play().catch(console.warn);
     }
     //
     // 2/ Switch mode if requested

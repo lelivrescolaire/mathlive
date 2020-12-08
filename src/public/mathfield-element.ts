@@ -110,20 +110,20 @@ declare global {
         ['keystroke']: CustomEvent<KeystrokeEvent>;
         ['focus-out']: CustomEvent<FocusOutEvent>;
     }
-}
+} 
 
 const MATHFIELD_TEMPLATE = document.createElement('template');
 MATHFIELD_TEMPLATE.innerHTML = `<style>
-#host {
+:host {
     display: block;
 }
-#host([hidden]) {
+:host([hidden]) {
     display: none;
 }
-#host([disabled]) {
+:host([disabled]) {
     opacity:  .5;
 }
-#host:focus, #host:focus-within {
+:host(:focus), :host(:focus-within) {
     outline: Highlight auto 1px;    /* For Firefox */
     outline: -webkit-focus-ring-color auto 1px;
 }
@@ -370,13 +370,11 @@ export class MathfieldElement extends HTMLElement implements Mathfield {
     constructor(options?: Partial<MathfieldOptions>) {
         super();
 
-        //let template = document.querySelector(`template#host`);
-        // if (template && (window as any).ShadyCSS) {
-        //   (window as any).ShadyCSS.prepareTemplate(template, 'host');
-        // }
-
+        if ((window as any).ShadyCSS) {
+            (window as any).ShadyCSS.prepareTemplate(MATHFIELD_TEMPLATE, 'host');
+        }
         this.attachShadow({ mode: 'open' });
-        
+
         this.shadowRoot.appendChild(MATHFIELD_TEMPLATE.content.cloneNode(true));
         const slot = this.shadowRoot.querySelector<HTMLSlotElement>(
             'slot:not([name])'
@@ -730,10 +728,10 @@ export class MathfieldElement extends HTMLElement implements Mathfield {
         if (!this.hasAttribute('role')) this.setAttribute('role', 'textbox');
         // this.setAttribute('aria-multiline', 'false');
         if (!this.hasAttribute('tabindex')) this.setAttribute('tabindex', '0');
-        //(window as any).ShadyCSS && (window as any).ShadyCSS.styleElement(this);
+        (window as any).ShadyCSS && (window as any).ShadyCSS.styleElement(this);
 
         this.#mathfield = new MathfieldPrivate(
-            this.shadowRoot.querySelector('#host > div'),
+            this.shadowRoot.querySelector('#host'),
             {
                 onBlur: () => {
                     this.dispatchEvent(
@@ -1154,7 +1152,6 @@ function getOptionsFromAttributes(
 export default MathfieldElement;
 
 declare global {
-    /** @internal */
     interface Window {
         MathfieldElement: typeof MathfieldElement;
     }

@@ -29,7 +29,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
 
-        "target": "es2019",
+        "target": "es2015",
         "module": "esnext",
         "esModuleInterop": true,
         "moduleResolution": "node",

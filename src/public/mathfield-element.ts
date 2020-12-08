@@ -114,16 +114,16 @@ declare global {
 
 const MATHFIELD_TEMPLATE = document.createElement('template');
 MATHFIELD_TEMPLATE.innerHTML = `<style>
-:host {
+#host {
     display: block;
 }
-:host([hidden]) {
+#host([hidden]) {
     display: none;
 }
-:host([disabled]) {
+#host([disabled]) {
     opacity:  .5;
 }
-:host(:focus), :host(:focus-within) {
+#host:focus, #host:focus-within {
     outline: Highlight auto 1px;    /* For Firefox */
     outline: -webkit-focus-ring-color auto 1px;
 }
@@ -370,10 +370,10 @@ export class MathfieldElement extends HTMLElement implements Mathfield {
     constructor(options?: Partial<MathfieldOptions>) {
         super();
 
-        let template = document.querySelector(`template#host`);
-        if (template && window.ShadyCSS) {
-          window.ShadyCSS.prepareTemplate(template, 'host');
-        }
+        //let template = document.querySelector(`template#host`);
+        // if (template && (window as any).ShadyCSS) {
+        //   (window as any).ShadyCSS.prepareTemplate(template, 'host');
+        // }
 
         this.attachShadow({ mode: 'open' });
         
@@ -730,7 +730,7 @@ export class MathfieldElement extends HTMLElement implements Mathfield {
         if (!this.hasAttribute('role')) this.setAttribute('role', 'textbox');
         // this.setAttribute('aria-multiline', 'false');
         if (!this.hasAttribute('tabindex')) this.setAttribute('tabindex', '0');
-        window.ShadyCSS && window.ShadyCSS.styleElement(this);
+        //(window as any).ShadyCSS && (window as any).ShadyCSS.styleElement(this);
 
         this.#mathfield = new MathfieldPrivate(
             this.shadowRoot.querySelector('#host > div'),
@@ -1159,7 +1159,7 @@ declare global {
         MathfieldElement: typeof MathfieldElement;
     }
 }
-if (typeof window != 'undefined' && window.customElements) {
+if (typeof window != 'undefined' && window.customElements && !window.MathfieldElement) {
     if (!window.customElements.get('math-field')) {
         window.MathfieldElement = MathfieldElement;
         window.customElements.define('math-field', MathfieldElement);

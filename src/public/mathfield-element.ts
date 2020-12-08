@@ -247,7 +247,6 @@ const gDeferredState = new WeakMap<
  * | `disabled` | `disabled` |
  * | `default-mode` | `options.defaultMode` |
  * | `fonts-directory` | `options.fontsDirectory` |
- * | `sounds-directory` | `options.soundsDirectory` |
  * | `horizontal-spacing-scale` | `options.horizontalSpacingScale` |
  * | `ignore-spacebar-in-math-mode` | `options.ignoreSpacbarInMathMode` |
  * | `inline-shortcut-timeout` | `options.inlineShortcutTimeout` |

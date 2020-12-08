@@ -411,13 +411,14 @@ export type VirtualKeyboardOptions = {
      * audio file in the `soundsDirectory` directory, or an `HTMLAudioElement`.
      */
     keypressSound:
+        | boolean
         | string
         | HTMLAudioElement
         | {
-              spacebar?: string | HTMLAudioElement;
-              return?: string | HTMLAudioElement;
-              delete?: string | HTMLAudioElement;
-              default: string | HTMLAudioElement;
+              spacebar?: boolean | string | HTMLAudioElement;
+              return?: boolean | string | HTMLAudioElement;
+              delete?: boolean | string | HTMLAudioElement;
+              default: boolean | string | HTMLAudioElement;
           };
     /**
      * Sound which will be played to provide feedback when a
@@ -427,7 +428,7 @@ export type VirtualKeyboardOptions = {
      * The property is either a string, the name of an audio file in the
      * `soundsDirectory` directory, or an `HTMLAudioElement`.
      */
-    plonkSound?: string | HTMLAudioElement;
+    plonkSound?: boolean | string | HTMLAudioElement;
 
     /**
      * The right hand side toolbar configuration.
@@ -852,13 +853,6 @@ export type MathfieldOptions = LayoutOptions &
          */
         fontsDirectory: string;
 
-        /**
-         * A URL fragment pointing to the directory containing the optional
-         * sounds used to provide feedback while typing.
-         *
-         * Some default sounds are available in the `/dist/sounds` directory of the SDK.
-         */
-        soundsDirectory: string;
         /**
          * Support for [Trusted Type](https://w3c.github.io/webappsec-trusted-types/dist/spec/).
          *

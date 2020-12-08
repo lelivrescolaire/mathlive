@@ -164,23 +164,21 @@ export class MathfieldPrivate implements Mathfield {
     ) {
         // Setup default config options
         this.options = updateOptions(getDefaultOptions(), {
-            plonkSound: 'plonk.wav',
+            plonkSound: false,
             keypressSound: {
-                spacebar: 'keypress-spacebar.wav',
-                return: 'keypress-return.wav',
-                delete: 'keypress-delete.wav',
-                default: 'keypress-standard.wav',
+                spacebar: false,
+                return: false,
+                delete: false,
+                default: false,
             },
             ...options,
         });
 
-        this.plonkSound = false
-        
-        this.keypressSound = false
-        this.spacebarKeypressSound = false
-        this.returnKeypressSound = false
-        this.deleteKeypressSound = false
-        
+        this.plonkSound = false;
+        this.keypressSound = false;
+        this.spacebarKeypressSound = false;
+        this.returnKeypressSound = false;
+        this.deleteKeypressSound = false;
 
         this.element = element;
         element['mathfield'] = this;
@@ -570,20 +568,11 @@ export class MathfieldPrivate implements Mathfield {
             }
         );
 
-        this.plonkSound = this.options.plonkSound as HTMLAudioElement;
-        if ( this.options.keypressSound && 
-            typeof this.options.keypressSound !== 'string' &&
-            !(this.options.keypressSound instanceof HTMLAudioElement)
-        ) {
-            this.keypressSound = this.options.keypressSound
-                .default as HTMLAudioElement;
-            this.spacebarKeypressSound = this.options.keypressSound
-                .spacebar as HTMLAudioElement;
-            this.returnKeypressSound = this.options.keypressSound
-                .return as HTMLAudioElement;
-            this.deleteKeypressSound = this.options.keypressSound
-                .delete as HTMLAudioElement;
-        }
+        this.plonkSound = false;
+        this.keypressSound = false;
+        this.spacebarKeypressSound = false;
+        this.returnKeypressSound = false;
+        this.deleteKeypressSound = false;
 
         if (!this.options.readOnly) {
             this.onBlur();
@@ -1024,7 +1013,6 @@ export class MathfieldPrivate implements Mathfield {
                 if (this.options.keypressVibration && navigator?.vibrate) {
                     navigator.vibrate(HAPTIC_FEEDBACK_DURATION);
                 }
-                //this.keypressSound?.play();
             }
             if (s === '\\\\') {
                 // This string is interpreted as an "insert row after" command

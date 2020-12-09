@@ -11,7 +11,6 @@ import { defaultAnnounceHook } from './a11y';
 import { INLINE_SHORTCUTS } from './shortcuts-definitions';
 import { DEFAULT_KEYBINDINGS } from './keybindings-definitions';
 
-
 const NO_OP_LISTENER = (): void => {
     return;
 };

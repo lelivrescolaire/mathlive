@@ -149,7 +149,7 @@ export function performWithFeedback(
     selector = selector.replace(/-\w/g, (m) =>
         m[1].toUpperCase()
     ) as SelectorPrivate;
-    
+
     return mathfield.executeCommand(selector);
 }
 

@@ -110,7 +110,7 @@ declare global {
         ['keystroke']: CustomEvent<KeystrokeEvent>;
         ['focus-out']: CustomEvent<FocusOutEvent>;
     }
-} 
+}
 
 const MATHFIELD_TEMPLATE = document.createElement('template');
 MATHFIELD_TEMPLATE.innerHTML = `<style>
@@ -370,7 +370,10 @@ export class MathfieldElement extends HTMLElement implements Mathfield {
         super();
 
         if ((window as any).ShadyCSS) {
-            (window as any).ShadyCSS.prepareTemplate(MATHFIELD_TEMPLATE, 'host');
+            (window as any).ShadyCSS.prepareTemplate(
+                MATHFIELD_TEMPLATE,
+                'host'
+            );
         }
         this.attachShadow({ mode: 'open' });
 
@@ -1155,7 +1158,11 @@ declare global {
         MathfieldElement: typeof MathfieldElement;
     }
 }
-if (typeof window != 'undefined' && window.customElements && !window.MathfieldElement) {
+if (
+    typeof window != 'undefined' &&
+    window.customElements &&
+    !window.MathfieldElement
+) {
     if (!window.customElements.get('math-field')) {
         window.MathfieldElement = MathfieldElement;
         window.customElements.define('math-field', MathfieldElement);

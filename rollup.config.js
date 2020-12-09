@@ -7,6 +7,7 @@ import postcss from 'rollup-plugin-postcss';
 import pkg from './package.json';
 import path from 'path';
 import chalk from 'chalk';
+import polyfill from 'rollup-plugin-polyfill';
 
 const { exec } = require('child_process');
 
@@ -172,6 +173,9 @@ const ROLLUP = [
                     moduleDirectory: 'submodules/math-json/src',
                 },
             }),
+            polyfill([
+                '@webcomponents/webcomponentsjs/webcomponents-bundle.js',
+            ]),
             typescript(TYPESCRIPT_OPTIONS),
         ],
         output: [
@@ -211,6 +215,9 @@ if (PRODUCTION) {
                 minimize: true,
             }),
             resolve(),
+            polyfill([
+                '@webcomponents/webcomponentsjs/webcomponents-bundle.js',
+            ]),
             typescript(TYPESCRIPT_OPTIONS),
             terser(TERSER_OPTIONS),
         ],

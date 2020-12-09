@@ -10,9 +10,6 @@ import { l10n } from './l10n';
 import { defaultAnnounceHook } from './a11y';
 import { INLINE_SHORTCUTS } from './shortcuts-definitions';
 import { DEFAULT_KEYBINDINGS } from './keybindings-definitions';
-import { gScriptUrl } from '../common/script-url';
-
-const AUDIO_FEEDBACK_VOLUME = 0.5; // from 0.0 to 1.0
 
 const NO_OP_LISTENER = (): void => {
     return;
@@ -27,49 +24,10 @@ export type MathfieldOptionsPrivate = MathfieldOptions & {
     ) => void; // @revisit 1.0: rename announceHook
 };
 
-function loadSound(
-    soundDirectory: string,
-    sound: string | HTMLAudioElement
-): HTMLAudioElement {
-    if (sound instanceof HTMLAudioElement) {
-        sound.load();
-        return sound;
-    }
-
-    const url = new URL(
-        (soundDirectory ?? './sounds') + '/' + sound,
-        gScriptUrl
-    ).toString();
-
-    const result: HTMLAudioElement = new Audio();
-    result.preload = 'auto';
-    result.src = url;
-    result.volume = AUDIO_FEEDBACK_VOLUME;
-    result.load();
-    return result;
-}
-
-function unloadSound(
-    sound:
-        | string
-        | HTMLAudioElement
-        | { [key: string]: HTMLAudioElement | string }
-): void {
-    if (sound instanceof HTMLAudioElement) {
-        sound.pause();
-        sound.removeAttribute('src');
-        // Important to properly unload: call load() after removing the
-        // `src` attribute
-        sound.load();
-    }
-}
-
 export function update(
     current: Required<MathfieldOptionsPrivate>,
     updates: Partial<MathfieldOptionsPrivate>
 ): Required<MathfieldOptionsPrivate> {
-    const soundsDirectory =
-        updates.soundsDirectory ?? current.soundsDirectory ?? './sounds';
     const result: Required<MathfieldOptionsPrivate> = get(
         current,
         Object.keys(current)
@@ -163,10 +121,8 @@ export function update(
                 }
                 break;
             case 'plonkSound':
-                break;
             case 'keypressSound':
                 break;
-                
             case 'onBlur':
             case 'onFocus':
             case 'onContentWillChange':
@@ -249,7 +205,6 @@ export function getDefault(): Required<MathfieldOptionsPrivate> {
         readOnly: false,
         createHTML: (s: string): any => s,
         fontsDirectory: './fonts',
-        soundsDirectory: './sounds',
 
         defaultMode: 'math',
         macros: MACROS,

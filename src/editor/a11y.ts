@@ -63,7 +63,6 @@ export function defaultAnnounceHook(
     if (action === 'plonk') {
         // Use this sound to indicate minor errors, for
         // example when an action has no effect.
-        //mathfield.plonkSound?.play().catch((err) => console.warn(err));
         // As a side effect, reset the keystroke buffer
         mathfield.resetKeystrokeBuffer();
     } else if (action === 'delete') {

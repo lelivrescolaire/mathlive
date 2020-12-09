@@ -128,7 +128,7 @@ MATHFIELD_TEMPLATE.innerHTML = `<style>
     outline: -webkit-focus-ring-color auto 1px;
 }
 </style>
-<div></div><slot style="display:none"></slot>`;
+<div id="host"></div><slot style="display:none"></slot>`;
 
 //
 // Deferred State
@@ -247,7 +247,6 @@ const gDeferredState = new WeakMap<
  * | `disabled` | `disabled` |
  * | `default-mode` | `options.defaultMode` |
  * | `fonts-directory` | `options.fontsDirectory` |
- * | `sounds-directory` | `options.soundsDirectory` |
  * | `horizontal-spacing-scale` | `options.horizontalSpacingScale` |
  * | `ignore-spacebar-in-math-mode` | `options.ignoreSpacbarInMathMode` |
  * | `inline-shortcut-timeout` | `options.inlineShortcutTimeout` |
@@ -306,6 +305,7 @@ const gDeferredState = new WeakMap<
  * | `unmount` | The element is about to be removed from the DOM |
  *
  */
+
 export class MathfieldElement extends HTMLElement implements Mathfield {
     /**
      * Private lifecycle hooks
@@ -365,10 +365,18 @@ export class MathfieldElement extends HTMLElement implements Mathfield {
     document.body.appendChild(mfe);
     * ```
     */
+
     constructor(options?: Partial<MathfieldOptions>) {
         super();
 
+        if ((window as any).ShadyCSS) {
+            (window as any).ShadyCSS.prepareTemplate(
+                MATHFIELD_TEMPLATE,
+                'host'
+            );
+        }
         this.attachShadow({ mode: 'open' });
+
         this.shadowRoot.appendChild(MATHFIELD_TEMPLATE.content.cloneNode(true));
         const slot = this.shadowRoot.querySelector<HTMLSlotElement>(
             'slot:not([name])'
@@ -383,18 +391,18 @@ export class MathfieldElement extends HTMLElement implements Mathfield {
         );
 
         // Inline options (as a JSON structure in the markup)
-        try {
-            const json = slot
-                .assignedElements()
-                .filter((x) => x['type'] !== 'application/json')
-                .map((x) => x.textContent)
-                .join('');
-            if (json) {
-                this.setOptions(JSON.parse(json));
-            }
-        } catch (e) {
-            console.log(e);
-        }
+        // try {
+        //     const json = slot
+        //         .assignedElements()
+        //         .filter((x) => x['type'] !== 'application/json')
+        //         .map((x) => x.textContent)
+        //         .join('');
+        //     if (json) {
+        //         this.setOptions(JSON.parse(json));
+        //     }
+        // } catch (e) {
+        //     console.log(e);
+        // }
 
         // Record the (optional) configuration options, as a deferred state
         if (options) {
@@ -722,9 +730,10 @@ export class MathfieldElement extends HTMLElement implements Mathfield {
         if (!this.hasAttribute('role')) this.setAttribute('role', 'textbox');
         // this.setAttribute('aria-multiline', 'false');
         if (!this.hasAttribute('tabindex')) this.setAttribute('tabindex', '0');
+        (window as any).ShadyCSS && (window as any).ShadyCSS.styleElement(this);
 
         this.#mathfield = new MathfieldPrivate(
-            this.shadowRoot.querySelector(':host > div'),
+            this.shadowRoot.querySelector('#host'),
             {
                 onBlur: () => {
                     this.dispatchEvent(
@@ -1145,12 +1154,15 @@ function getOptionsFromAttributes(
 export default MathfieldElement;
 
 declare global {
-    /** @internal */
     interface Window {
         MathfieldElement: typeof MathfieldElement;
     }
 }
-if (typeof window != 'undefined' && window.customElements) {
+if (
+    typeof window != 'undefined' &&
+    window.customElements &&
+    !window.MathfieldElement
+) {
     if (!window.customElements.get('math-field')) {
         window.MathfieldElement = MathfieldElement;
         window.customElements.define('math-field', MathfieldElement);

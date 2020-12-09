@@ -149,26 +149,7 @@ export function performWithFeedback(
     selector = selector.replace(/-\w/g, (m) =>
         m[1].toUpperCase()
     ) as SelectorPrivate;
-    if (
-        selector === 'moveToNextPlaceholder' ||
-        selector === 'moveToPreviousPlaceholder' ||
-        selector === 'complete'
-    ) {
-        //mathfield.returnKeypressSound?.play().catch(console.warn);
-    } else if (
-        selector === 'deleteBackward' ||
-        selector === 'deleteForward' ||
-        selector === 'deletePreviousWord' ||
-        selector === 'deleteNextWord' ||
-        selector === 'deleteToGroupStart' ||
-        selector === 'deleteToGroupEnd' ||
-        selector === 'deleteToMathFieldStart' ||
-        selector === 'deleteToMathFieldEnd'
-    ) {
-        //mathfield.deleteKeypressSound?.play().catch(console.warn);
-    } else {
-        //mathfield.keypressSound?.play().catch(console.warn);
-    }
+
     return mathfield.executeCommand(selector);
 }
 
